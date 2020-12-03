@@ -1,0 +1,96 @@
+{
+  "playerStartCoords": [39,40],
+  "operativeStartCoords": [
+    [39,55],
+    [39,55],
+    [10,40],
+    [10,40],
+    [16,5],
+    [16,5],
+    [48,18],
+    [48,18]
+  ],
+  "rooms" : [
+    {
+      "name":"Rec Room",
+      "systemCoords": null,
+      "teleporterCoords": [33,37]
+    },
+    {
+      "name":"Storage Room",
+      "systemCoords": [16,6],
+      "teleporterCoords": null
+    },
+    {
+      "name":"Stern Corridor",
+      "systemCoords": [17,13],
+      "teleporterCoords": null
+    },
+    {
+      "name":"Kitchen",
+      "systemCoords": [44,15],
+      "teleporterCoords": [44,9]
+    },
+    {
+      "name":"Canteen",
+      "systemCoords": [32,16],
+      "teleporterCoords": [20,8]
+    },
+    {
+      "name":"Bedroom",
+      "systemCoords": [41,25],
+      "teleporterCoords": [41,20]
+    },
+    {
+      "name":"Amidship Corridor",
+      "systemCoords": [27,25],
+      "teleporterCoords": null
+    },
+    {
+      "name":"Bathroom",
+      "systemCoords": [43,33],
+      "teleporterCoords": null
+    },
+    {
+      "name":"Locker Room",
+      "systemCoords": [33,33],
+      "teleporterCoords": null
+    },
+    {
+      "name":"Medbay",
+      "systemCoords": [18,33],
+      "teleporterCoords": [19,32]
+    },
+    {
+      "name":"Lab",
+      "systemCoords": [48,42],
+      "teleporterCoords": [52,41]
+    },
+    {
+      "name":"Left Bow Corridor",
+      "systemCoords": [10,41],
+      "teleporterCoords": null
+    },
+    {
+      "name":"Right Bow Corridor",
+      "systemCoords": [31,41],
+      "teleporterCoords": null
+    },
+    {
+      "name":"Office",
+      "systemCoords": [49,56],
+      "teleporterCoords": null
+    },
+    {
+      "name":"Control Room",
+      "systemCoords": [39,56],
+      "teleporterCoords": [36,52]
+    },
+    {
+      "name":"Engine Room",
+      "systemCoords": [48,19],
+      "teleporterCoords": [51,12]
+    }
+  ]
+
+}
