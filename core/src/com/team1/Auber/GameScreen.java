@@ -13,14 +13,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
-//import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import com.team1.Auber.HUD.HUD;
-import com.team1.Auber.HUD.TeleporterDialog;
 import org.json.*;
 import java.util.Base64;
 
@@ -43,22 +40,16 @@ public class GameScreen extends ScreenAdapter {
     private com.team1.Auber.HUD.HUD HUD;
     public Integer difficulty;
     public Boolean resumingSave;
-    protected com.team1.Auber.HUD.PauseDialog pauseDialog;
-
-    /**
-     * The lerp of the camera, used for linear interpolation on the player movement to calculate the camera position
-     */
-    private final float CameraLerp = 2f;
 
     /**
      * The sprite batch for everything except the map popup
      */
-    private SpriteBatch batch = new SpriteBatch();
+    private final SpriteBatch batch = new SpriteBatch();
 
     /**
      * Used for the map pop up. This batch renders over the top of the normal batch when the map is open.
      */
-    private SpriteBatch mapSpriteBatch = new SpriteBatch();
+    private final SpriteBatch mapSpriteBatch = new SpriteBatch();
 
     /**
      * The background sounds
@@ -68,17 +59,17 @@ public class GameScreen extends ScreenAdapter {
     /**
      * The background image. Used for the paralax scrolling
      */
-    private TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
+    private final TextureRegion backgroundTexture = new TextureRegion(new Texture("img/tilesets/Nebula-Aqua-Pink.png"), 0, 0, 1920, 1080);
 
     /**
      * The image displayed in the map popup
      */
-    private TextureRegion mapPopupTexture = new TextureRegion(new Texture("img/mapScreen.png"), 0, 0, 1920, 1080);
+    private final TextureRegion mapPopupTexture = new TextureRegion(new Texture("img/mapScreen.png"), 0, 0, 1920, 1080);
 
     /**
      * The tiled map, from a TMX file.
      */
-    private TiledMap tiledMap = new TmxMapLoader().load("auber_map.tmx");
+    private final TiledMap tiledMap = new TmxMapLoader().load("auber_map.tmx");
 
     /**
      * The game data from a json file.
@@ -87,7 +78,7 @@ public class GameScreen extends ScreenAdapter {
 
     Preferences prefs = Gdx.app.getPreferences("Auber");
 
-    public ArrayList<Operative> remainingOperatives = new ArrayList<Operative>();
+    public ArrayList<Operative> remainingOperatives = new ArrayList<>();
 
     /**
      * Create the game and start the background sounds playing
@@ -185,10 +176,11 @@ public class GameScreen extends ScreenAdapter {
                 e.printStackTrace();
             }
 
-            for(int i = 0; i < sysInList.size(); i++){
-                int newx = (int) sysInList.get(i).get(0);
-                int newy = (int) sysInList.get(i).get(1);
-                String newRoom = (String) sysInList.get(i).get(2);
+            assert sysInList != null;
+            for (ArrayList arrayList : sysInList) {
+                int newx = (int) arrayList.get(0);
+                int newy = (int) arrayList.get(1);
+                String newRoom = (String) arrayList.get(2);
                 stage.addActor(new Systems(
                         newx,
                         newy,
@@ -221,7 +213,6 @@ public class GameScreen extends ScreenAdapter {
             }
 
             //HUD.setValues(Operative.remainingOpers, Systems.systemsRemaining.size());
-            HUD.setValues(8, 15);
         }else{
             String operSaveString = prefs.getString("remainingOperatives");
             ByteArrayInputStream operIn = new ByteArrayInputStream(Base64.getDecoder().decode(operSaveString));
@@ -233,10 +224,11 @@ public class GameScreen extends ScreenAdapter {
                 e.printStackTrace();
             }
 
-            for(int i = 0; i < operInList.size(); i++){
-                int newx = Math.round((int) operInList.get(i).get(0) / 32);
-                int newy = Math.round((int) operInList.get(i).get(1) / 32);
-                int newAbility = (int) operInList.get(i).get(2);
+            assert operInList != null;
+            for (ArrayList arrayList : operInList) {
+                int newx = Math.round((int) arrayList.get(0) / 32);
+                int newy = Math.round((int) arrayList.get(1) / 32);
+                int newAbility = (int) arrayList.get(2);
                 Operative newOp = new Operative(
                         newx,
                         newy,
@@ -248,10 +240,10 @@ public class GameScreen extends ScreenAdapter {
                 stage.addActor(newOp);
                 this.remainingOperatives.add(newOp);
             }
-            HUD.setValues(8, 15);
         }
+        HUD.setValues(8, 15);
 
-        }
+    }
 
     @Override
     public void render(float delta) {
@@ -260,9 +252,12 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
 
         //Move the camera to follow the player
-        Vector3 position = camera.position;
-        camera.position.x += (player.getX() + delta - camera.position.x) * CameraLerp * delta;
-        camera.position.y += (player.getY() + delta - camera.position.y) * CameraLerp * delta;
+        /*
+          The lerp of the camera, used for linear interpolation on the player movement to calculate the camera position
+         */
+        float cameraLerp = 2f;
+        camera.position.x += (player.getX() + delta - camera.position.x) * cameraLerp * delta;
+        camera.position.y += (player.getY() + delta - camera.position.y) * cameraLerp * delta;
         camera.update();
         map.setView(camera);
 
@@ -316,10 +311,10 @@ public class GameScreen extends ScreenAdapter {
         prefs.clear();
         prefs.flush();
 
-        ArrayList<ArrayList> savedOperatives = new ArrayList<ArrayList>();
+        ArrayList<ArrayList> savedOperatives = new ArrayList<>();
         for(Operative remainingOper : remainingOperatives){
             if(! remainingOper.dead){
-                ArrayList<Integer> thisOper = new ArrayList<Integer>();
+                ArrayList<Integer> thisOper = new ArrayList<>();
                 thisOper.add((int) remainingOper.getX());
                 thisOper.add((int) remainingOper.getY());
                 thisOper.add(remainingOper.specialAbilityID);
@@ -329,35 +324,25 @@ public class GameScreen extends ScreenAdapter {
 
         ByteArrayOutputStream operOut = new ByteArrayOutputStream();
         new ObjectOutputStream(operOut).writeObject(savedOperatives);
-        String operSaveString = new String(Base64.getEncoder().encodeToString(operOut.toByteArray()));
+        String operSaveString = Base64.getEncoder().encodeToString(operOut.toByteArray());
         prefs.putString("remainingOperatives", operSaveString);
-
-        /**ByteArrayInputStream operIn = new ByteArrayInputStream(Base64.decode(operSaveString));
-        ArrayList<ArrayList> operInList = null;
-        try {
-            Object operInObj = new ObjectInputStream(operIn).readObject();
-            operInList = (ArrayList<ArrayList>) operInObj;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }*/
-
 
         prefs.putInteger("auberX", (int) player.getX());
         prefs.putInteger("auberY", (int) player.getY());
         prefs.putInteger("auberHealth", player.getHealth());
 
-        ArrayList<ArrayList> savedSystems = new ArrayList<ArrayList>();
+        ArrayList<ArrayList> savedSystems = new ArrayList<>();
         for(Systems remainingSystem : Systems.systemsRemaining){
-            ArrayList<Object> remainingSys = new ArrayList<Object>();
-            remainingSys.add((int) remainingSystem.gridX);
-            remainingSys.add((int) remainingSystem.gridY);
-            remainingSys.add((String) remainingSystem.roomName);
+            ArrayList<Object> remainingSys = new ArrayList<>();
+            remainingSys.add(remainingSystem.gridX);
+            remainingSys.add(remainingSystem.gridY);
+            remainingSys.add(remainingSystem.roomName);
             savedSystems.add(remainingSys);
         }
 
         ByteArrayOutputStream sysOut = new ByteArrayOutputStream();
         new ObjectOutputStream(sysOut).writeObject(savedSystems);
-        String sysSaveString = new String(Base64.getEncoder().encodeToString(sysOut.toByteArray()));
+        String sysSaveString = Base64.getEncoder().encodeToString(sysOut.toByteArray());
         prefs.putString("remainingSystems", sysSaveString);
 
         prefs.putBoolean("canBeResumed", true);
