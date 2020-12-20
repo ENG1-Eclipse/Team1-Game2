@@ -12,6 +12,8 @@ buildscript {
     dependencies {
 
     }
+
+
 }
 
 allprojects {
@@ -45,8 +47,13 @@ project(":desktop") {
         implementation project(":core")
         api "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+
         
     }
+
+
+
 }
 
 project(":core") {
@@ -58,4 +65,15 @@ project(":core") {
         api "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         compile 'org.json:json:20190722'
     }
+
+    jar {
+        manifest {
+            attributes(
+
+                    'Main-Class': 'com.team1.Auber.desktop.DesktopLauncher'
+            )
+        }
+    }
+
 }
+
