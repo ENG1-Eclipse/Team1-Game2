@@ -90,11 +90,7 @@ public class GameScreen extends ScreenAdapter {
     public GameScreen (AuberGame game, Integer difficulty, Boolean resumingSave){
         this.difficulty = difficulty;
         this.game = game;
-        //this.resumingSave = resumingSave;
         this.resumingSave = resumingSave;
-
-        prefs.putBoolean("canBeResumed", false);
-        prefs.flush();
         ambience.play();
         ambience.setLooping(true);
         ambience.setVolume(0.7f);

@@ -50,7 +50,7 @@ public class GameEndScreen extends ScreenAdapter {
     /**
      * Create the a end game screen, with either a game over message or a won game message
      * @param game the AuberGame instance
-     * @param playerWon wheather the player won the game
+     * @param playerWon whether the player won the game
      */
     public GameEndScreen (AuberGame game, boolean playerWon){
         this.game = game;
