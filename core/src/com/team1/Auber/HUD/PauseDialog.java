@@ -50,11 +50,10 @@ public class PauseDialog extends Dialog {
          * Add buttons to pause menu
          */
 
-        text("PRESS 'X' WHILE PLAYING TO SAVE GAME\nSelect an option: ").center();
-        button("Resume Game", 0);
-
-
-        button("Main Menu", 1);
+        text("Options: ").center();
+        button("Resume", 0);
+        button("Save Game", 1);
+        button("Exit", 2);
     }
 
     /**
@@ -76,18 +75,19 @@ public class PauseDialog extends Dialog {
     }
 
     /**
-     * Does an action based on the selcted button
+     * Does an action based on the selected button
      * @param object - the ID of the button selected
      */
     public void result(Object object){
 
         if((Integer) object == 0){
             return;
-        } else if((Integer) object == 1){
-            //ambience.stop();
+        } else if((Integer) object == 2){
             game.setScreen(new TitleScreen(game, true));
             return;
-
+        }else if((Integer) object == 1){
+            GameScreen.needToSave = true;
+            return;
         }
     }
 

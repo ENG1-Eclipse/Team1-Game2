@@ -1,5 +1,6 @@
 package com.team1.Auber;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
@@ -40,6 +41,7 @@ public class GameScreen extends ScreenAdapter {
     private com.team1.Auber.HUD.HUD HUD;
     public Integer difficulty;
     public Boolean resumingSave;
+    public static Boolean needToSave = false;
 
     /**
      * The sprite batch for everything except the map popup
@@ -273,7 +275,8 @@ public class GameScreen extends ScreenAdapter {
         //Draw the HUD
         HUD.draw();
 
-        if(Gdx.input.isKeyJustPressed(Keys.X)){
+        if(needToSave){
+            needToSave = false;
             try {
                 SaveGame();
             } catch (IOException e) {

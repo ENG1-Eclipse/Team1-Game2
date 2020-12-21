@@ -8,6 +8,7 @@ import com.team1.Auber.AuberGame;
  * the desktop launcher holder with the main function
  */
 public class DesktopLauncher {
+
 	public static void main (String[] arg) {
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
