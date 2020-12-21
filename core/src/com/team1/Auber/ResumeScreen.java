@@ -1,6 +1,7 @@
 package com.team1.Auber;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,9 +20,9 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Input.Keys;
 
 /**
- * Instruction is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the instruction screen.
+ * Resume Screen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the resume screen.
  *
- * @author Bogdan Bodnariu-Lescinschi
+ * @author Harry Smith (Team 1)
  */
 public class ResumeScreen extends ScreenAdapter {
 
@@ -43,6 +44,8 @@ public class ResumeScreen extends ScreenAdapter {
 
     public int resumingDifficulty = 0;
 
+    Preferences prefs = Gdx.app.getPreferences("Auber");
+
     /**
      *
      * @param game
@@ -55,7 +58,7 @@ public class ResumeScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        //Create the stage and allow it to process inputs. Using an Extend Viewport for scalablity of the product
+        //Create the stage and allow it to process inputs. Using an Extend Viewport for scalability of the product
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
         Gdx.input.setInputProcessor(stage);
 
@@ -113,6 +116,8 @@ public class ResumeScreen extends ScreenAdapter {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 menuSelect.play(0.2f);
+                prefs.clear();
+                prefs.flush();
                 game.setScreen(new DifficultyScreen(game, isMusicPlaying));
 
             }
