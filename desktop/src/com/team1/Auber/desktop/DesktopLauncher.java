@@ -4,6 +4,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.team1.Auber.AuberGame;
 
+import java.awt.*;
+
 /**
  * the desktop launcher holder with the main function
  */
@@ -13,8 +15,9 @@ public class DesktopLauncher {
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Auber";
-		config.width = 1920;
-		config.height = 1080;
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		config.width = screenSize.width;
+		config.height = screenSize.height;
 		config.fullscreen = true;
 		config.forceExit = false;
 		new LwjglApplication(new AuberGame(), config);
