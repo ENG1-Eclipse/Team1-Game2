@@ -1,6 +1,5 @@
 package com.team1.Auber;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
@@ -42,6 +41,7 @@ public class GameScreen extends ScreenAdapter {
     public Integer difficulty;
     public Boolean resumingSave;
     public static Boolean needToSave = false;
+    public static Boolean needToExit = false;
 
     /**
      * The sprite batch for everything except the map popup
@@ -91,9 +91,12 @@ public class GameScreen extends ScreenAdapter {
         this.difficulty = difficulty;
         this.game = game;
         this.resumingSave = resumingSave;
-        ambience.play();
-        ambience.setLooping(true);
-        ambience.setVolume(0.7f);
+        if(! AuberGame.isGameMuted){
+            ambience.play();
+            ambience.setLooping(true);
+            ambience.setVolume(0.7f);
+        }
+
     }
 
     
@@ -274,10 +277,15 @@ public class GameScreen extends ScreenAdapter {
         if(needToSave){
             needToSave = false;
             try {
-                SaveGame();
+                saveGame();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+
+        if(needToExit){
+            needToExit = false;
+            exitGame();
         }
 
         //Show the map if the M key is pressed
@@ -306,7 +314,12 @@ public class GameScreen extends ScreenAdapter {
         HUD.dispose();
     }
 
-    public void SaveGame() throws IOException {
+    public void exitGame(){
+        ambience.stop();
+        game.setScreen(new TitleScreen(game, false));
+    }
+
+    public void saveGame() throws IOException {
         prefs.clear();
         prefs.flush();
 

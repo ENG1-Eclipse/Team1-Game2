@@ -121,7 +121,10 @@ public class Player extends Actor {
 
             //Sets the footstep sound effect to play at 0.32 sec intervals when the player is moving
             if (TimeUtils.timeSinceNanos(audioStartTimer) > 320000000) {
-                step.play(0.3f);
+                if(! AuberGame.isGameMuted){
+                    step.play(0.3f);
+                }
+
                 audioStartTimer = TimeUtils.nanoTime();
             }
 
@@ -172,11 +175,17 @@ public class Player extends Actor {
                     if (thing instanceof Operative){
                         target = (Operative) thing;
                         target.onHit(this, 20);
-                        punch1.play(0.20f);
+                        if(! AuberGame.isGameMuted){
+                            punch1.play(0.20f);
+                        }
+
                     }
                 }
                 if (target == null) {
-                    swing.play(0.45f);
+                    if(! AuberGame.isGameMuted){
+                        swing.play(0.45f);
+                    }
+
                 }
                 attackDelay = 61;
                 //display attack
@@ -224,7 +233,10 @@ public class Player extends Actor {
     public void onHit(Actor by,int amount) {
         //See if it was the operative that attacked
         if (by instanceof Operative){
-            punch2.play(0.30f);
+            if(! AuberGame.isGameMuted){
+                punch2.play(0.30f);
+            }
+
 
             //Reduce the health if the player, and make sure the operative is not dead
             health -= amount;

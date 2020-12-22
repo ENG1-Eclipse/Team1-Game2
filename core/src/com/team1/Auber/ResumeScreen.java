@@ -94,7 +94,9 @@ public class ResumeScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                menuSelect.play(0.2f);
+                if(! AuberGame.isGameMuted){
+                    menuSelect.play(0.2f);
+                }
                 game.setScreen(new GameScreen(game, resumingDifficulty, true));
 
             }
@@ -115,7 +117,9 @@ public class ResumeScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                menuSelect.play(0.2f);
+                if(! AuberGame.isGameMuted){
+                    menuSelect.play(0.2f);
+                }
                 prefs.clear();
                 prefs.flush();
                 game.setScreen(new DifficultyScreen(game, isMusicPlaying));

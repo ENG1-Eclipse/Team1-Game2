@@ -122,7 +122,10 @@ public class NotificationWindow extends ScrollPane {
         table.row();
 
         //Play sound + scroll to bottom to display the new message
-        notificationSound.play(0.13f);
+        if(! com.team1.Auber.AuberGame.isGameMuted){
+            notificationSound.play(0.13f);
+        }
+
         this.scrollTo(0, 0, 0, 0);
     }
 

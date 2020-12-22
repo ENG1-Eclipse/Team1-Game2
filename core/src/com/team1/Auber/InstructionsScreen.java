@@ -85,7 +85,10 @@ public class InstructionsScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                menuSelect.play(0.2f);
+                if(! AuberGame.isGameMuted){
+                    menuSelect.play(0.2f);
+                }
+
                 game.setScreen(new TitleScreen(game, true));
 
             }

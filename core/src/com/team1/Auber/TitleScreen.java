@@ -71,7 +71,7 @@ public class TitleScreen extends ScreenAdapter {
     @Override
     public void show() {
 
-        if(!isMusicPlaying){
+        if((!isMusicPlaying) && (! AuberGame.isGameMuted)){
             menuMusic.play();
             menuMusic.setVolume(0.1f);
             menuMusic.setLooping(true);
@@ -111,7 +111,10 @@ public class TitleScreen extends ScreenAdapter {
                 //Stop the music playing and change the screen to the game screen
                 menuMusic.stop();
                 GameEndScreen.menuMusic.stop();
-                menuSelect.play(0.2f);
+                if(! AuberGame.isGameMuted){
+                    menuSelect.play(0.2f);
+                }
+
 
                 Boolean resumeAvailable = prefs.getBoolean("canBeResumed", false);
 
@@ -141,10 +144,58 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                menuSelect.play(0.2f);
+                if(! AuberGame.isGameMuted){
+                    menuSelect.play(0.2f);
+                }
                 game.setScreen(new InstructionsScreen(game));
             }
         });
+
+        //Create toggle mute button, add it to the table with its click event
+        final ImageButton.ImageButtonStyle unmutedStyle = new ImageButton.ImageButtonStyle();
+        unmutedStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/unmutedButtonInactive.png"))));
+        unmutedStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/unmutedButtonActive.png"))));
+        unmutedStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/unmutedButtonActive.png"))));
+
+        final ImageButton.ImageButtonStyle mutedStyle = new ImageButton.ImageButtonStyle();
+        mutedStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/mutedButtonInactive.png"))));
+        mutedStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/mutedButtonActive.png"))));
+        mutedStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/mutedButtonActive.png"))));
+
+        final ImageButton muteButton = new ImageButton(unmutedStyle);
+
+        if(AuberGame.isGameMuted ==  true){
+            muteButton.setStyle(mutedStyle);
+        }
+
+        table.add(muteButton).center().pad(5);
+        table.row();
+
+        muteButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                //As per libGDX docs this is needed to return true for the touchup event to trigger
+                return true;
+            }
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+
+                if(AuberGame.isGameMuted){
+                    //unmute game
+                    menuMusic.setVolume(0.1f);
+                    menuMusic.play();
+                    AuberGame.isGameMuted = false;
+                    muteButton.setStyle(unmutedStyle);
+                }else{
+                    //mute game
+                    menuMusic.stop();
+                    AuberGame.isGameMuted = true;
+                    muteButton.setStyle(mutedStyle);
+                }
+
+            }
+        });
+
 
         //Create the quit game button, add it to the table with its click event
         ImageButton.ImageButtonStyle quitStyle =  new ImageButton.ImageButtonStyle();
@@ -163,7 +214,10 @@ public class TitleScreen extends ScreenAdapter {
             }
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                menuSelect.play(0.2f);
+                if(! AuberGame.isGameMuted){
+                    menuSelect.play(0.2f);
+                }
+
                 Gdx.app.exit();
             }
         });

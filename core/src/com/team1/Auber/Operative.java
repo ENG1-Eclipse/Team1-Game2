@@ -380,7 +380,10 @@ public class Operative extends Actor {
     remove();
     image.dispose();
 
-    metalDeath.play(0.3f);
+    if(! AuberGame.isGameMuted){
+      metalDeath.play(0.3f);
+    }
+
     if (remainingOpers == 0){
       game.setScreen(new GameEndScreen(game, true));
     }

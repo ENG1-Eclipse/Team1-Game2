@@ -18,6 +18,8 @@ public class AuberGame extends Game {
 	SpriteBatch batch;
 	Skin skin;
 
+	public static Boolean isGameMuted = false;
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();

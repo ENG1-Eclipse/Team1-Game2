@@ -83,7 +83,8 @@ public class PauseDialog extends Dialog {
         if((Integer) object == 0){
             return;
         } else if((Integer) object == 2){
-            game.setScreen(new TitleScreen(game, true));
+            //game.setScreen(new TitleScreen(game, true));
+            GameScreen.needToExit = true;
             return;
         }else if((Integer) object == 1){
             GameScreen.needToSave = true;

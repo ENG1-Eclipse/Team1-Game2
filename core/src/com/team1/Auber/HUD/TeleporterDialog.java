@@ -112,7 +112,10 @@ public class TeleporterDialog extends Dialog {
         //Move the player to the center of the new teleporter and play teleporter the sound
         JSONArray coords = (JSONArray) object;
         float teleporterOffset = teleporterSize / 2f;
-        teleporterSounds.play(0.13f);
+        if(! com.team1.Auber.AuberGame.isGameMuted){
+            teleporterSounds.play(0.13f);
+        }
+
         player.setPosition(player.map.worldPos(coords.getInt(0) + teleporterOffset -0.125f),
                 player.map.worldPos(coords.getInt(1) + teleporterOffset - 0.25f));
 

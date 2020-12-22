@@ -65,7 +65,7 @@ public class DifficultyScreen extends ScreenAdapter {
     @Override
     public void show() {
 
-        if(!isMusicPlaying){
+        if((!isMusicPlaying) && (! AuberGame.isGameMuted)){
             menuMusic.play();
             menuMusic.setVolume(0.1f);
             menuMusic.setLooping(true);
@@ -103,9 +103,12 @@ public class DifficultyScreen extends ScreenAdapter {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 //Stop the music playing and change the screen to the game screen
-                menuMusic.stop();
-                GameEndScreen.menuMusic.stop();
-                menuSelect.play(0.2f);
+                if(! AuberGame.isGameMuted){
+                    menuMusic.stop();
+                    GameEndScreen.menuMusic.stop();
+                    menuSelect.play(0.2f);
+                }
+
                 /** Difficulty of 0 represents EASY mode **/
                 game.setScreen(new GameScreen(game, 0, false));
             }
@@ -129,9 +132,12 @@ public class DifficultyScreen extends ScreenAdapter {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 //Stop the music playing and change the screen to the game screen
-                menuMusic.stop();
-                GameEndScreen.menuMusic.stop();
-                menuSelect.play(0.2f);
+                if(! AuberGame.isGameMuted){
+                    menuMusic.stop();
+                    GameEndScreen.menuMusic.stop();
+                    menuSelect.play(0.2f);
+                }
+
                 /** Difficulty of 1 represents NORMAL mode **/
                 game.setScreen(new GameScreen(game, 1, false));
             }
@@ -155,9 +161,11 @@ public class DifficultyScreen extends ScreenAdapter {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 //Stop the music playing and change the screen to the game screen
-                menuMusic.stop();
-                GameEndScreen.menuMusic.stop();
-                menuSelect.play(0.2f);
+                if(! AuberGame.isGameMuted){
+                    menuMusic.stop();
+                    GameEndScreen.menuMusic.stop();
+                    menuSelect.play(0.2f);
+                }
                 /** Difficulty of 2 represents HARD mode **/
                 game.setScreen(new GameScreen(game, 2, false));
             }
