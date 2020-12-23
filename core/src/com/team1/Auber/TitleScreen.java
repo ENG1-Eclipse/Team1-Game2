@@ -119,10 +119,10 @@ public class TitleScreen extends ScreenAdapter {
                 Boolean resumeAvailable = prefs.getBoolean("canBeResumed", false);
 
                 if(! resumeAvailable){
-                    game.setScreen((new DifficultyScreen(game, isMusicPlaying)));
+                    game.setScreen((new DifficultyScreen(game)));
                 }else{
                     int resDiff = prefs.getInteger("gameDifficulty", 0);
-                    game.setScreen(new ResumeScreen(game, isMusicPlaying, resDiff));
+                    game.setScreen(new ResumeScreen(game, resDiff));
                 }
             }
         });

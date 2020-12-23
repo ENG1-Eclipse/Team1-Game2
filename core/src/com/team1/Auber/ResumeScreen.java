@@ -40,7 +40,6 @@ public class ResumeScreen extends ScreenAdapter {
      */
     private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
 
-    public Boolean isMusicPlaying = false;
 
     public int resumingDifficulty = 0;
 
@@ -50,9 +49,8 @@ public class ResumeScreen extends ScreenAdapter {
      *
      * @param game
      */
-    public ResumeScreen(AuberGame game, boolean isMusicPlaying, int resumingDifficulty){
+    public ResumeScreen(AuberGame game, int resumingDifficulty){
         this.game = game;
-        this.isMusicPlaying = isMusicPlaying;
         this.resumingDifficulty = resumingDifficulty;
     }
 
@@ -122,7 +120,7 @@ public class ResumeScreen extends ScreenAdapter {
                 }
                 prefs.clear();
                 prefs.flush();
-                game.setScreen(new DifficultyScreen(game, isMusicPlaying));
+                game.setScreen(new DifficultyScreen(game));
 
             }
         });

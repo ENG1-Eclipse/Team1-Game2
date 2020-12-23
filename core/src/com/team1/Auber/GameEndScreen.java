@@ -107,7 +107,8 @@ public class GameEndScreen extends ScreenAdapter {
                     menuSelect.play(0.2f);
                 }
 
-                game.setScreen(new TitleScreen(game, true));
+                menuMusic.stop();
+                game.setScreen(new TitleScreen(game, false));
 
             }
         });

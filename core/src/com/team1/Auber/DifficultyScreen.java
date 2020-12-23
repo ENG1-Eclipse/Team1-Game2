@@ -30,10 +30,6 @@ public class DifficultyScreen extends ScreenAdapter {
     private Stage stage;
     private final SpriteBatch batch = new SpriteBatch();
 
-    /**
-     * A flag to see if there is music playing from a previous screen
-     */
-    private final boolean isMusicPlaying;
 
     /**
      * The background music for the menu
@@ -55,21 +51,13 @@ public class DifficultyScreen extends ScreenAdapter {
     /**
      * Create the the title screen screen.
      * @param game the AuberGame instance
-     * @param isMusicPlaying whether their is music currently playing
      */
-    public DifficultyScreen (AuberGame game, boolean isMusicPlaying){
+    public DifficultyScreen (AuberGame game){
         this.game = game;
-        this.isMusicPlaying = isMusicPlaying;
     }
 
     @Override
     public void show() {
-
-        if((!isMusicPlaying) && (! AuberGame.isGameMuted)){
-            menuMusic.play();
-            menuMusic.setVolume(0.1f);
-            menuMusic.setLooping(true);
-        }
 
         //Create the stage and allow it to process inputs. Using an Extend Viewport for scalablity of the product
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
