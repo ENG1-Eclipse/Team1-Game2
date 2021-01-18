@@ -21,6 +21,8 @@ import com.team1.Auber.HUD.HUD;
 import org.json.*;
 import java.util.Base64;
 
+import com.team1.Auber.PowerUp;
+
 
 /**
  * GameScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the game.
@@ -134,6 +136,7 @@ public class GameScreen extends ScreenAdapter {
             stage.addActor(player);
 
             player.setHealth(prefs.getInteger("auberHealth", 100));
+            player.setMaxHealth(prefs.getInteger("auberMaxHealth",100));
 
 
         }
@@ -244,6 +247,11 @@ public class GameScreen extends ScreenAdapter {
         }
         HUD.setValues(8, 15);
 
+        // Adding powerups to the map
+        PowerUp pUp = new PowerUp(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1),0);
+        stage.addActor(pUp);
+        pUp = new PowerUp(map, gameData.getJSONArray("playerStartCoords").getInt(0)+1, gameData.getJSONArray("playerStartCoords").getInt(1)+1,1);
+        stage.addActor(pUp);
     }
 
     @Override
@@ -342,6 +350,7 @@ public class GameScreen extends ScreenAdapter {
         prefs.putInteger("auberX", (int) player.getX());
         prefs.putInteger("auberY", (int) player.getY());
         prefs.putInteger("auberHealth", player.getHealth());
+        prefs.putInteger("auberMaxHealth", player.getMaxHealth());
 
         ArrayList<ArrayList> savedSystems = new ArrayList<>();
         for(Systems remainingSystem : Systems.systemsRemaining){

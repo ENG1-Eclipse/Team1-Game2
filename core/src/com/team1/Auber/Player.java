@@ -1,5 +1,7 @@
 package com.team1.Auber;
 
+
+import com.team1.Auber.PowerUp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -49,6 +51,11 @@ public class Player extends Actor {
      * The health of the player
      */
     private int health = 100;
+
+    /**
+     * Max health of the player
+     */
+    private int maxHealth = 100;
 
     /**
      * The health timer. This is used when the player is in the medbay to add 1 health on 0.01 seconds
@@ -179,6 +186,8 @@ public class Player extends Actor {
                             punch1.play(0.20f);
                         }
 
+                    }else if(thing instanceof PowerUp){
+                        ((PowerUp)thing).onHit(this);
                     }
                 }
                 if (target == null) {
@@ -204,7 +213,7 @@ public class Player extends Actor {
         //Player Health
         if (map.Effect(2,this)){
             healthTimer += Gdx.graphics.getDeltaTime();
-            if(healthTimer >= 0.1f && health < 100) {
+            if(healthTimer >= 0.1f && health < maxHealth) {
                 health += 1;
                 healthTimer = 0f;
             }
@@ -260,6 +269,20 @@ public class Player extends Actor {
      */
     public int getHealth(){
         return health;
+    }
+    public int getMaxHealth(){
+        return this.maxHealth;
+    }
+
+    public float getSpeed(){
+        return this.playerSpeed;
+    }
+    public void setSpeed(float newSpeed){
+        this.playerSpeed = newSpeed;
+    }
+
+    public void setMaxHealth(int newHealth){
+        this.maxHealth = newHealth;
     }
 
     public void setHealth(int newHealth){

@@ -60,7 +60,7 @@ public class PlayerHealthBar extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         float radius = size /2;
-        float healthPercentage = (float) player.getHealth() / 100f;
+        float healthPercentage = (float) player.getHealth() / player.getMaxHealth();
         float circleCenterX = getX() + radius;
         float circleCenterY = getY() + radius;
 
