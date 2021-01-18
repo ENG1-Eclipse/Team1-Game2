@@ -247,11 +247,49 @@ public class GameScreen extends ScreenAdapter {
         }
         HUD.setValues(8, 15);
 
+        //--------------------------------------- P O W E R  U P S ---------------------------------------------------
         // Adding powerups to the map
-        PowerUp pUp = new PowerUp(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1),0);
+        PowerUp pUp;
+        /**
+         * Type    : Health Boost
+         * Location: Bathroom  
+         * Xpos    : 43
+         * Ypos    : 33
+         */
+        pUp = new PowerUp(map, 43, 33,0);
         stage.addActor(pUp);
-        pUp = new PowerUp(map, gameData.getJSONArray("playerStartCoords").getInt(0)+1, gameData.getJSONArray("playerStartCoords").getInt(1)+1,1);
+        /**
+         * Type    : Health Boost
+         * Location: Stern Corridor  
+         * Xpos    : 17
+         * Ypos    : 13
+         */
+        pUp = new PowerUp(map, 17, 13,0);
         stage.addActor(pUp);
+
+        /**
+         * Type    : Speed Boost
+         * Location: Lab
+         * Xpos    : 48
+         * Ypos    : 42
+         */
+        pUp = new PowerUp(map, 48, 42,1);
+        stage.addActor(pUp);
+
+        /**
+         * Type    : Speed Boost
+         * Location: Storage Room
+         * Xpos    : 16
+         * Ypos    : 6
+         */
+        pUp = new PowerUp(map, 16, 6,1);
+        stage.addActor(pUp);
+
+
+
+
+
+
     }
 
     @Override

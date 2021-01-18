@@ -73,7 +73,7 @@ public class PowerUp extends Actor {
                 powerUpTexture.dispose();
             }else if(this.powerType == 1){
                 //Speed Boost
-                ((Player)by).setSpeed(((Player)by).getSpeed()*1.1f);
+                ((Player)by).setSpeed(((Player)by).getSpeed()*1.33f);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();
