@@ -1,6 +1,5 @@
 package com.team1.Auber;
 
-
 import com.team1.Auber.PowerUp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -34,6 +33,7 @@ public class Player extends Actor {
     private final Texture imageRight = new Texture(Gdx.files.internal("img/player_right.png"));
     private final Texture imageAttack = new Texture(Gdx.files.internal("img/player_attack.png")); //assumed to be square
     private final Texture imageTarget = new Texture(Gdx.files.internal("img/player_target.png"));
+    private final Texture specialAttack = new Texture(Gdx.files.internal("img/specialAttack.png"));
     private Texture currentImage = imageDown;
 
     //Different sound effects for different conditions
@@ -69,8 +69,19 @@ public class Player extends Actor {
 
     /**
      * The attack delay
+     * Attack damage
      */
-    private int attackDelay = 0;
+    private float attackDelay = 0;
+    private int attackDamage = 20;
+
+    /**Special Large attack
+     * Enable
+     * Delay
+     * Damage multiplier
+     */
+    private Boolean enableAttack = false;
+    private float specialAttackDelay = 0; 
+    private float damageMulti = 2.5f;
 
     private Integer difficulty = 0;
 
@@ -181,7 +192,7 @@ public class Player extends Actor {
                 for (Actor thing : map.InArea(xAtt, yAtt, wAtt, wAtt)) {
                     if (thing instanceof Operative){
                         target = (Operative) thing;
-                        target.onHit(this, 20);
+                        target.onHit(this, attackDamage);
                         if(! AuberGame.isGameMuted){
                             punch1.play(0.20f);
                         }
@@ -196,7 +207,11 @@ public class Player extends Actor {
                     }
 
                 }
-                attackDelay = 61;
+                /**
+                 * Attack delay now in seconds
+                 */
+
+                attackDelay = 2f;
                 //display attack
                 batch.draw(imageAttack, xAtt, yAtt, wAtt, wAtt);
             } else {
@@ -204,10 +219,55 @@ public class Player extends Actor {
                 batch.draw(imageTarget, xAtt, yAtt, wAtt, wAtt);
             }
         }
+        //If the F is down large attack attack
+        if(Gdx.input.isKeyPressed(Input.Keys.F) && specialAttackDelay == 0 && enableAttack){
+            //do the attack
+            float xAtt = getX() - 12f-32f;
+            float yAtt = getY() - 6f-32f;
+
+            Operative target = null;
+            for (Actor thing : map.InArea(xAtt, yAtt, 96f, 96f)) {
+                if (thing instanceof Operative){
+                    target = (Operative) thing;
+                    target.onHit(this, (int)(attackDamage*damageMulti));
+                    if(! AuberGame.isGameMuted){
+                        punch1.play(0.20f);
+                    }
+
+                }else if(thing instanceof PowerUp){
+                    ((PowerUp)thing).onHit(this);
+                }
+            }
+            if (target == null) {
+                if(! AuberGame.isGameMuted){
+                    swing.play(0.45f);
+                }
+
+            }
+            specialAttackDelay = 20;
+            //display attack
+            batch.draw(specialAttack,xAtt, yAtt, 96f, 96f);
+        }
+
+
 
         //attack delay
         if (attackDelay > 0){
-            attackDelay -= 1;
+            /**
+             * Changed timeing to be based off the delta time rather than frame numbers
+             *  */
+            attackDelay -= Gdx.graphics.getDeltaTime();
+            
+        }
+        if(specialAttackDelay > 0){
+            specialAttackDelay -= Gdx.graphics.getDeltaTime();
+        }
+
+        if(attackDelay < 0){
+            attackDelay = 0;
+        }
+        if(specialAttackDelay<0){
+            specialAttackDelay = 0;
         }
 
         //Player Health
@@ -287,5 +347,25 @@ public class Player extends Actor {
 
     public void setHealth(int newHealth){
         health = newHealth;
+    }
+
+    public void setDamage(int newDamage){
+        attackDamage = newDamage;
+    }
+    public int getDamage(){
+        return attackDamage;
+    }
+
+    public void enableSpecialAttack(){
+        enableAttack = true;
+    }
+    public void disableSpecialAttack(){
+        enableAttack = false;
+    }
+    public boolean getSpecialAttack(){
+        return enableAttack;
+    }
+    public boolean canSpecialAttack(){
+        return specialAttackDelay<=0;
     }
 }

@@ -27,6 +27,7 @@ public class HUD extends Stage {
     protected NotificationWindow notificationWindow;
     protected TeleporterDialog teleporterDialog;
     protected PauseDialog pauseDialog;
+    protected SpecialAttackIcon specialAttack;
     public com.team1.Auber.AuberGame currentGame;
 
     /**
@@ -80,6 +81,10 @@ public class HUD extends Stage {
         operativesHealthBar = new HealthBar(50, scaledWidth, "Operatives Remaining", Operative.remainingOpers);
         operativesHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight + 50);
         this.addActor(operativesHealthBar);
+
+        specialAttack = new SpecialAttackIcon(player, 100);
+        specialAttack.setPosition(20,2*getHeight()/3);
+        this.addActor(specialAttack);
 
         //Create the teleporter and the event listener
         teleporterDialog = new TeleporterDialog(gameData, player, this,2);

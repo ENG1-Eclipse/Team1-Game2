@@ -285,11 +285,14 @@ public class GameScreen extends ScreenAdapter {
         pUp = new PowerUp(map, 16, 6,1);
         stage.addActor(pUp);
 
-
-
-
-
-
+        /**
+         * Type    : Special Attack
+         * Location: MedBay
+         * Xpos    : 18
+         * Ypos    : 33
+         */
+        pUp = new PowerUp(map, 18, 33,3);
+        stage.addActor(pUp);
     }
 
     @Override

@@ -24,7 +24,7 @@ public class PowerUp extends Actor {
     public MapRenderer map;
     private final Texture powerUpTexture;
     int powerType;
-    private final String powerUpNames[] = {"health","speed","strength"};
+    private final String powerUpNames[] = {"health","speed","strength","specialAttackPowerUp"};
 
     float xPos,yPos;
 
@@ -48,7 +48,7 @@ public class PowerUp extends Actor {
 
     float time;
     float animationRate = 1f;
-    int size = 20;
+    int size = 25;
     public void draw(Batch batch, float parentAlpha) {
         //Draw the powerup image
         time += Gdx.graphics.getDeltaTime();
@@ -74,6 +74,30 @@ public class PowerUp extends Actor {
             }else if(this.powerType == 1){
                 //Speed Boost
                 ((Player)by).setSpeed(((Player)by).getSpeed()*1.33f);
+                map.autoLeave(this);
+                remove();
+                powerUpTexture.dispose();
+                
+            }
+            else if(this.powerType == 2){
+                //Attack Boost +5 hit damage
+                ((Player)by).setDamage(((Player)by).getDamage()+5);
+                map.autoLeave(this);
+                remove();
+                powerUpTexture.dispose();
+                
+            }
+            else if(this.powerType == 3){
+                //Special Attack is enabled by this
+                ((Player)by).enableSpecialAttack();
+                map.autoLeave(this);
+                remove();
+                powerUpTexture.dispose();
+                
+            }
+            else if(this.powerType == 4){
+                //God Mode?
+                //((Player)by);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();
