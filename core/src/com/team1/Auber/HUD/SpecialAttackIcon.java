@@ -25,7 +25,7 @@ public class SpecialAttackIcon extends Actor {
     protected Boolean setFontScale = true;
 
     /**
-     * Create the health bar with the LibGDX default font from {@link com.badlogic.gdx.graphics.g2d.BitmapFont}.
+     * Create the Special Attack Icon with the LibGDX default font from {@link com.badlogic.gdx.graphics.g2d.BitmapFont}.
      *
      * @param player the player
      * @param size the size of the circle
@@ -35,7 +35,7 @@ public class SpecialAttackIcon extends Actor {
     }
 
     /**
-     * Create the health bar.
+     * Create the Special Attack Icon.
      *
      * @param player the player
      * @param size the size of the circle
@@ -49,7 +49,7 @@ public class SpecialAttackIcon extends Actor {
     }
 
     /**
-     * Draw the health bar using the shape render.
+     * Draw the special attack.
      *
      * @param batch The current batch from the satage
      * @param parentAlpha The parent alpha
@@ -58,7 +58,7 @@ public class SpecialAttackIcon extends Actor {
     public void draw(Batch batch, float parentAlpha) {
         
 
-        //Draw the health bar text
+        //Draw the Special Attack Icon F
         
         if(setFontScale){
             //Set the scale on the first time through
