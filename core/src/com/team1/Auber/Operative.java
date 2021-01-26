@@ -28,7 +28,9 @@ public class Operative extends Actor {
   private GraphPath<GridNode> currentPath;
   private int nodeNum;
   private HUD hud;
+  
 
+  private GameScreen gameScreen;
   /**
    * The number of remaining operative that are alive
    */
@@ -113,11 +115,12 @@ public class Operative extends Actor {
    * @param difficulty The difficulty of the game
    * @param specialAbilityID - This operative's special ability, if required. 0 = No ability.
    */
-  public Operative(int x, int y, MapRenderer map, HUD hud, Integer difficulty, Integer specialAbilityID) {
+  public Operative(int x, int y, MapRenderer map, HUD hud, Integer difficulty, Integer specialAbilityID,GameScreen screen) {
     this.difficulty = difficulty;
     this.specialAbilityID = specialAbilityID;
     this.map = map;
     this.hud = hud;
+    this.gameScreen = screen;
 
     /**
      * Increase speed if this operative has the speed ability
@@ -372,6 +375,10 @@ public class Operative extends Actor {
    * Called when the operative dies
    */
   public void onDeath(){
+    // Create a powerup on death if of type: 2
+    if(this.specialAbilityID == 2){
+      gameScreen.createPowerUp(getX(), getY(), 2);
+    }
     dead = true;
     map.autoLeave(this,getX(),getY(), getWidth(), getHeight());
     remainingOpers -= 1;

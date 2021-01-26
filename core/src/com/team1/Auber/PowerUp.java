@@ -5,6 +5,7 @@ import com.team1.Auber.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.FloatTextureData;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.FloatArray;
 
@@ -45,6 +46,16 @@ public class PowerUp extends Actor {
         setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
         map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
     }
+    
+    public PowerUp(MapRenderer map, Float x, Float y,int powerUpType){
+        powerType = powerUpType;
+        powerUpTexture = new Texture(Gdx.files.internal("img/powerUps/"+powerUpNames[powerUpType]+".png"));
+        this.map = map;
+        xPos = x;
+        yPos = y;
+        setBounds(xPos, yPos, 20f, 20f);
+        map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
+    }
 
     float time;
     float animationRate = 1f;
@@ -73,7 +84,7 @@ public class PowerUp extends Actor {
                 powerUpTexture.dispose();
             }else if(this.powerType == 1){
                 //Speed Boost
-                ((Player)by).setSpeed(((Player)by).getSpeed()*1.33f);
+                ((Player)by).setSpeed(((Player)by).getSpeed()*1.1f);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();

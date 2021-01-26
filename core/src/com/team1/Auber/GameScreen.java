@@ -210,7 +210,8 @@ public class GameScreen extends ScreenAdapter {
                         map,
                         this.HUD,
                         this.difficulty,
-                        gameData.getJSONArray("operativeData").getJSONArray(i).getInt(2)
+                        gameData.getJSONArray("operativeData").getJSONArray(i).getInt(2),
+                        this
                 );
                 stage.addActor(newOp);
                 this.remainingOperatives.add(newOp);
@@ -239,7 +240,8 @@ public class GameScreen extends ScreenAdapter {
                         map,
                         this.HUD,
                         this.difficulty,
-                        newAbility
+                        newAbility,
+                        this
                 );
                 stage.addActor(newOp);
                 this.remainingOperatives.add(newOp);
@@ -416,5 +418,20 @@ public class GameScreen extends ScreenAdapter {
         HUD.saveNotification("Game Saved Successfully");
         HUD.saveNotification("Press ESC to exit game");
 
+    }
+
+
+    /**
+     * Used to drop a new powerUp.
+     * @param x x pos
+     * @param y y pos
+     * @param type powerup type
+     * 
+     */
+    void createPowerUp(Float x, Float y,int type){
+        //Drop Powerup on death
+        PowerUp pUp;
+        pUp = new PowerUp(map, x, y,type);
+        stage.addActor(pUp);
     }
 }
