@@ -2,6 +2,9 @@ package com.team1.Auber.HUD;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -29,6 +32,7 @@ public class HUD extends Stage {
     protected PauseDialog pauseDialog;
     protected SpecialAttackIcon specialAttack;
     public com.team1.Auber.AuberGame currentGame;
+
 
     /**
      * Used to calculate the height of the HUD as a fractional value of the screen
@@ -94,8 +98,9 @@ public class HUD extends Stage {
             public boolean keyTyped(InputEvent event, char key)
             {
                 //if the letter to is typed the show the teleporter dialouge
-                if(key == 'e'){
+                if(key == 'E' || key == 'e'){
                     teleporterDialog.show(getStage());
+
                     return true;
                 }
                 return false;

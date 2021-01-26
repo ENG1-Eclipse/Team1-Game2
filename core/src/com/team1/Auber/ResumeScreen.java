@@ -146,7 +146,7 @@ public class ResumeScreen extends ScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-        //If the excape key is pressed go back to the main menu
+        //If the escape key is pressed go back to the main menu
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
             game.setScreen(new TitleScreen(game, false));
         }

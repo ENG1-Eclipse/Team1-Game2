@@ -342,7 +342,7 @@ public class GameScreen extends ScreenAdapter {
         //Show the map if the M key is pressed
         if (Gdx.input.isKeyPressed(Keys.M)){
             mapSpriteBatch.begin();
-            mapSpriteBatch.draw(mapPopupTexture, 0, 0);
+            mapSpriteBatch.draw(mapPopupTexture, 0, 0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             mapSpriteBatch.end();
         }
 

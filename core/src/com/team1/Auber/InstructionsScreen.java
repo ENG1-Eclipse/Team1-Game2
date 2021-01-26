@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -29,6 +32,9 @@ public class InstructionsScreen extends ScreenAdapter {
     private Stage stage;
     private SpriteBatch batch = new SpriteBatch();
 
+    public static Texture Back_Button_inactive;
+    public static Texture Back_Button_active;
+
     /**
      * Load the background image
      */
@@ -51,7 +57,7 @@ public class InstructionsScreen extends ScreenAdapter {
     public void show() {
         //Create the stage and allow it to process inputs. Using an Extend Viewport for scalablity of the product
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
-        Gdx.input.setInputProcessor(stage);
+
 
         //Create & expand the table
         Table table = new Table();
@@ -70,21 +76,38 @@ public class InstructionsScreen extends ScreenAdapter {
         table.add(instructions).align(Align.top);
         table.row();
 
-        //Create and add the back button and add the event listener
-        ImageButton.ImageButtonStyle backStyle =  new ImageButton.ImageButtonStyle();
-        backStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/backButtonInactive.png"))));
-        backStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/backButtonActive.png"))));
-        backStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/backButtonActive.png"))));
-        ImageButton backButton = new ImageButton(backStyle);
-        backButton.setPosition(20,20);
-        backButton.addListener(new InputListener(){
+
+        Back_Button_inactive = new Texture("img/menu/backButtonInactive.png");
+        Back_Button_active = new Texture("img/menu/backButtonActive.png");
+
+        final TextureRegion MyTextureRegion = new TextureRegion(Back_Button_inactive);
+        Drawable drawable = new TextureRegionDrawable(MyTextureRegion);
+        final ImageButton backButton = new ImageButton(drawable);
+
+        backButton.setPosition(Gdx.graphics.getWidth()/7 - 88,Gdx.graphics.getHeight()/16 - 50);
+
+
+        // Check if button is clicked
+        backButton.addListener(new ClickListener(){
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                //As per libGDX docs this is needed to return true for the touchup event to trigger
-                return true;
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+
+                ImageButton.ImageButtonStyle _oldStyle = backButton.getStyle();
+                _oldStyle.imageUp = new TextureRegionDrawable(Back_Button_active);
+                backButton.setStyle(_oldStyle);
             }
+
             @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+
+                ImageButton.ImageButtonStyle _oldStyle = backButton.getStyle();
+                _oldStyle.imageUp = new TextureRegionDrawable(Back_Button_inactive);
+                backButton.setStyle(_oldStyle);
+            }
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Go back to the home screen
                 if(! AuberGame.isGameMuted){
                     menuSelect.play(0.2f);
                 }
@@ -92,11 +115,14 @@ public class InstructionsScreen extends ScreenAdapter {
                 game.setScreen(new TitleScreen(game, true));
 
             }
+
         });
 
         //Add the table and button to the stage
-        stage.addActor(backButton);
+
         stage.addActor(table);
+        stage.addActor(backButton);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
