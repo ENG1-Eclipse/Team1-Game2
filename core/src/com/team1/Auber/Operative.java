@@ -9,6 +9,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.team1.Auber.HUD.HUD;
 import com.team1.Auber.OperativeAI.GridGraph;
 import com.team1.Auber.OperativeAI.GridNode;
+import com.team1.Auber.Smoke.Smoke;
+
 import java.lang.Math;
 import java.util.ArrayList;
 
@@ -29,6 +31,11 @@ public class Operative extends Actor {
   private int nodeNum;
   private HUD hud;
   
+
+
+  // Values for the generation of smoke;
+  private float smokeRate = 0.075f; // Time between smoke particles
+  private float smokeTimer = 0f;  // Timer to keep track
 
   private GameScreen gameScreen;
   /**
@@ -307,6 +314,13 @@ public class Operative extends Actor {
     }
     // Draw the image
     batch.draw(image, getX() - hitboxOffset, getY() - hitboxOffset, image.getWidth(), image.getHeight());
+
+    smokeTimer += Gdx.graphics.getDeltaTime();
+    // Draw Smoke
+    if(smokeTimer > smokeRate){
+      gameScreen.createSmoke(getX()+getWidth()/2, getY()+3*getHeight()/4, 0, 15);
+      smokeTimer = 0;
+    }
   }
 
   /**

@@ -18,8 +18,12 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.team1.Auber.HUD.HUD;
+import com.team1.Auber.Smoke.Smoke;
+
 import org.json.*;
 import java.util.Base64;
+
+import javax.print.FlavorException;
 
 import com.team1.Auber.PowerUp;
 
@@ -433,5 +437,9 @@ public class GameScreen extends ScreenAdapter {
         PowerUp pUp;
         pUp = new PowerUp(map, x, y,type);
         stage.addActor(pUp);
+    }
+
+    void createSmoke(float x, float y, float xVel,float yVel){
+        stage.addActor(new Smoke(x, y, xVel, yVel));
     }
 }
