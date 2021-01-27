@@ -2,8 +2,12 @@ package com.team1.Auber.HUD;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.team1.Auber.Player;
 import org.json.JSONArray;
@@ -21,6 +25,12 @@ public class TeleporterDialog extends Dialog {
     private final Player player;
     private final HUD hud;
     private final ArrayList<int[]> teleporterPositions = new ArrayList<int[]>();
+
+    private final SpriteBatch mapSpriteBatch = new SpriteBatch();
+    private final TextureRegion mapPopupTexture = new TextureRegion(new Texture("img/mapScreen.png"), 0, 0, 1920, 1080);
+    Image image1 = new Image(mapPopupTexture);
+
+
 
     /**
      * The size of the teleporter in TMX squares
@@ -72,13 +82,20 @@ public class TeleporterDialog extends Dialog {
      * @param stage the stage to add the dialogue to
      * @return this
      */
+
     @Override
     public TeleporterDialog show(Stage stage){
         if(!isPlayerTouchingTeleporter()){
             hud.errorNotification("You need to be standing on a teleporter pad to be able to teleport!");
         } else {
+            // adding minimap to teleport option and making it scalable
+            image1.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+            stage.addActor(image1);
+
             super.show(stage,fadeIn(fadeTime));
-            setPosition(Math.round((stage.getWidth() - getWidth()) / 2), Math.round((stage.getHeight() - getHeight()) / 2));
+            setPosition(Math.round((stage.getWidth() - getWidth()) / 2), Math.round((stage.getHeight() - getHeight()) - 40));
+
+
         }
 
         return this;
@@ -89,6 +106,7 @@ public class TeleporterDialog extends Dialog {
      */
     @Override
     public void hide(){
+        image1.remove();
         super.hide(fadeOut(fadeTime));
     }
 
