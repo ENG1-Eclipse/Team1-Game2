@@ -34,7 +34,7 @@ public class Operative extends Actor {
 
 
   // Values for the generation of smoke;
-  private float smokeRate = 0.075f; // Time between smoke particles
+  private float smokeRate = 0.25f; // Time between smoke particles
   private float smokeTimer = 0f;  // Timer to keep track
 
   private GameScreen gameScreen;
@@ -318,7 +318,7 @@ public class Operative extends Actor {
     smokeTimer += Gdx.graphics.getDeltaTime();
     // Draw Smoke
     if(smokeTimer > smokeRate){
-      gameScreen.createSmoke(getX()+getWidth()/2, getY()+3*getHeight()/4, 0, 15);
+      gameScreen.createSmoke(getX()+getWidth()/2, getY()+getHeight(), 0, 15);
       smokeTimer = 0;
     }
   }
@@ -392,6 +392,9 @@ public class Operative extends Actor {
     // Create a powerup on death if of type: 2
     if(this.specialAbilityID == 2){
       gameScreen.createPowerUp(getX(), getY(), 2);
+    }else if(this.specialAbilityID == 1){
+      // Drop a regen powerup
+      gameScreen.createPowerUp(getX(), getY(), 4);
     }
     dead = true;
     map.autoLeave(this,getX(),getY(), getWidth(), getHeight());

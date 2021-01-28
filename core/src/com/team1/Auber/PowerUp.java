@@ -25,7 +25,7 @@ public class PowerUp extends Actor {
     public MapRenderer map;
     private final Texture powerUpTexture;
     int powerType;
-    private final String powerUpNames[] = {"health","speed","strength","specialAttackPowerUp"};
+    private final String powerUpNames[] = {"health","speed","strength","specialAttackPowerUp","regen"};
 
     float xPos,yPos;
 
@@ -107,8 +107,8 @@ public class PowerUp extends Actor {
                 
             }
             else if(this.powerType == 4){
-                //God Mode?
-                //((Player)by);
+                //Health Regen for 15 seconds
+                ((Player)by).startRegen(15);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();

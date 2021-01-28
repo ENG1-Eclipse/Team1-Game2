@@ -63,6 +63,18 @@ public class Player extends Actor {
     private float healthTimer = 0;
 
     /**
+     * Regen Timer
+     * Regen Counter
+     * 
+     * Used to heal the player for the period of the timer
+     * 
+    */
+    private float regenTimer = 0;
+    private float regenCounter = 0;
+    private float regenRate = 0.20f;
+
+
+    /**
      * Used as a timer so that the footsteps sound is played evey 0.32 seconds
      */
     private long audioStartTimer = 0;
@@ -107,6 +119,20 @@ public class Player extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+
+        // Regen
+        if(regenTimer>0){
+            regenTimer -= Gdx.graphics.getDeltaTime();
+            regenCounter += Gdx.graphics.getDeltaTime();
+            if(regenCounter >= regenRate){
+                if(health<maxHealth){
+                    health +=1;
+                }
+                
+                regenCounter = 0;
+            }
+        }
+
 
         //Move the player by a set amount if the keys are pressed.
         float deltaX = 0;
@@ -367,5 +393,9 @@ public class Player extends Actor {
     }
     public boolean canSpecialAttack(){
         return specialAttackDelay<=0;
+    }
+
+    public void startRegen(float regenTime){
+        regenTimer = regenTime;
     }
 }

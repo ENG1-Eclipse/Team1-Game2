@@ -1,20 +1,13 @@
 package com.team1.Auber.Smoke;
 
-import com.team1.Auber.Player;
-
-import java.security.Provider;
-
-import javax.print.FlavorException;
-import javax.swing.UIDefaults.ProxyLazyValue;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ai.btree.decorator.Random;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.FloatTextureData;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.FloatArray;
+
 
 
 /**
@@ -42,13 +35,15 @@ public class Smoke extends Actor {
         rand = new java.util.Random();
         size = (int)(rand.nextFloat()*size);
         ttl = rand.nextFloat()*ttl;
-        xVel = xVel + 5*(1-2*rand.nextFloat());
+        xVel = xVel + 10*(1-2*rand.nextFloat());
     }
 
 
     int size = 50;
     float delta;
     Color c;
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         delta = Gdx.graphics.getDeltaTime();
         time += delta;
