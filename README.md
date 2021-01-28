@@ -11,5 +11,5 @@ Deep Space Y is a space station on the outskirts of the galaxy, inhabited by hum
 
 The space station has been recently infiltrated by a team of 8 hostile operatives whose mission is to sabotage key systems of the station and render it inoperable.
 
-Find the operatives and apprehended them before they destroy the 15 key systems, found as blue panels on the ships wall. Be careful though, the operatives will fight if attacked! Teleport to the Medbay if you need to heal.
+Find the operatives and apprehended them before they destroy the 15 key systems, found as blue panels on the ships wall. Be careful though, the operatives will fight if attacked! Teleport to the Medbay if you need to heal or pick up some of the power ups around the map.
 
