@@ -161,7 +161,7 @@ public class GameScreen extends ScreenAdapter {
 
         //create systems + add them to the stage
         Systems.systemsRemaining.clear();
-        
+
         final String roomsDataTag = "rooms";
         final String systemCoardsDataTag = "systemCoords";
 
@@ -207,7 +207,7 @@ public class GameScreen extends ScreenAdapter {
 
 
         HUD.setValues(8, 15);
-        final String opDataTag = "opperativeData";
+        final String opDataTag = "operativeData";
         //create operatives + add them to the stage
         Operative.remainingOpers = 0;
         if(! resumingSave){
