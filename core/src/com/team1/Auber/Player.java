@@ -1,6 +1,5 @@
 package com.team1.Auber;
 
-import com.team1.Auber.PowerUp;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -87,9 +86,9 @@ public class Player extends Actor {
     private int attackDamage = 20;
 
     /**Special Large attack
-     * Enable
-     * Delay
-     * Damage multiplier
+     *  Enable
+     *  Delay
+     *  Damage multiplier
      */
     private Boolean enableAttack = false;
     private float specialAttackDelay = 0; 
@@ -128,7 +127,7 @@ public class Player extends Actor {
                 if(health<maxHealth){
                     health +=1;
                 }
-                
+
                 regenCounter = 0;
             }
         }

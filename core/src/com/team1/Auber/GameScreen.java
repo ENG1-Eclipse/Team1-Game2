@@ -161,15 +161,19 @@ public class GameScreen extends ScreenAdapter {
 
         //create systems + add them to the stage
         Systems.systemsRemaining.clear();
+        
+        final String roomsDataTag = "rooms";
+        final String systemCoardsDataTag = "systemCoords";
+
         if(! resumingSave){
-            for (int i = 0; i < gameData.getJSONArray("rooms").length(); i++) {
-                if (!gameData.getJSONArray("rooms").getJSONObject(i).isNull("systemCoords")) {
+            for (int i = 0; i < gameData.getJSONArray(roomsDataTag).length(); i++) {
+                if (!gameData.getJSONArray(roomsDataTag).getJSONObject(i).isNull(systemCoardsDataTag)) {
                     stage.addActor(new Systems(
-                            gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(0),
-                            gameData.getJSONArray("rooms").getJSONObject(i).getJSONArray("systemCoords").getInt(1),
+                            gameData.getJSONArray(roomsDataTag).getJSONObject(i).getJSONArray(systemCoardsDataTag).getInt(0),
+                            gameData.getJSONArray(roomsDataTag).getJSONObject(i).getJSONArray(systemCoardsDataTag).getInt(1),
                             map,
                             this.HUD,
-                            gameData.getJSONArray("rooms").getJSONObject(i).getString("name"))
+                            gameData.getJSONArray(roomsDataTag).getJSONObject(i).getString("name"))
                     );
                 }
             }
@@ -203,18 +207,18 @@ public class GameScreen extends ScreenAdapter {
 
 
         HUD.setValues(8, 15);
-
+        final String opDataTag = "opperativeData";
         //create operatives + add them to the stage
         Operative.remainingOpers = 0;
         if(! resumingSave){
-            for (int i = 0; i < gameData.getJSONArray("operativeData").length(); i++) {
+            for (int i = 0; i < gameData.getJSONArray(opDataTag).length(); i++) {
                 Operative newOp = new Operative(
-                        gameData.getJSONArray("operativeData").getJSONArray(i).getInt(0),
-                        gameData.getJSONArray("operativeData").getJSONArray(i).getInt(1),
+                        gameData.getJSONArray(opDataTag).getJSONArray(i).getInt(0),
+                        gameData.getJSONArray(opDataTag).getJSONArray(i).getInt(1),
                         map,
                         this.HUD,
                         this.difficulty,
-                        gameData.getJSONArray("operativeData").getJSONArray(i).getInt(2),
+                        gameData.getJSONArray(opDataTag).getJSONArray(i).getInt(2),
                         this
                 );
                 stage.addActor(newOp);
@@ -399,7 +403,7 @@ public class GameScreen extends ScreenAdapter {
         prefs.putInteger("auberHealth", player.getHealth());
         prefs.putInteger("auberMaxHealth", player.getMaxHealth());
 
-        ArrayList<ArrayList> savedSystems = new ArrayList<>();
+        ArrayList<ArrayList<Object>> savedSystems = new ArrayList<>();
         for(Systems remainingSystem : Systems.systemsRemaining){
             ArrayList<Object> remainingSys = new ArrayList<>();
             remainingSys.add(remainingSystem.gridX);

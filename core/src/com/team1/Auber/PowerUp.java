@@ -1,13 +1,9 @@
 package com.team1.Auber;
 
-import com.team1.Auber.Player;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.FloatTextureData;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.FloatArray;
 
 import java.lang.Math;
 
@@ -27,7 +23,8 @@ public class PowerUp extends Actor {
     int powerType;
     private final String powerUpNames[] = {"health","speed","strength","specialAttackPowerUp","regen"};
 
-    float xPos,yPos;
+    float xPos;
+    float yPos;
 
     /**
      * Create the powerup
@@ -118,7 +115,5 @@ public class PowerUp extends Actor {
         
         }
     }
-
-
 
 }

@@ -9,7 +9,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.team1.Auber.HUD.HUD;
 import com.team1.Auber.OperativeAI.GridGraph;
 import com.team1.Auber.OperativeAI.GridNode;
-import com.team1.Auber.Smoke.Smoke;
 
 import java.lang.Math;
 import java.util.ArrayList;
