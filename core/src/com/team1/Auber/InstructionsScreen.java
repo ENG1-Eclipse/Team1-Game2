@@ -84,8 +84,12 @@ public class InstructionsScreen extends ScreenAdapter {
         Drawable drawable = new TextureRegionDrawable(MyTextureRegion);
         final ImageButton backButton = new ImageButton(drawable);
 
-        backButton.setPosition(Gdx.graphics.getWidth()/7 - 88,Gdx.graphics.getHeight()/16 - 50);
-
+        // Adjusting BACK button so it does not overlap the text if resolution is smaller than 1920x1080
+        if (Gdx.graphics.getWidth() >= 1920 && Gdx.graphics.getHeight() >= 1080 ) {
+            backButton.setPosition(Gdx.graphics.getWidth() / 10 - 88, Gdx.graphics.getHeight() / 16 - 50);
+        }else{
+            backButton.setPosition(Gdx.graphics.getWidth() / 10 - 88, Gdx.graphics.getHeight() - 150);
+        }
 
         // Check if button is clicked
         backButton.addListener(new ClickListener(){
