@@ -48,13 +48,10 @@ public class GameScreen extends ScreenAdapter {
     public Boolean resumingSave;
     public static Boolean needToSave = false;
     public static Boolean needToExit = false;
-<<<<<<< Updated upstream
     public static Boolean gameOverWin = false;
     public static Boolean gameOverLose = false;
 
-=======
     public Boolean demo = false;
->>>>>>> Stashed changes
     /**
      * The sprite batch for everything except the map popup
      */
