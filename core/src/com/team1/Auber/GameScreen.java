@@ -48,6 +48,8 @@ public class GameScreen extends ScreenAdapter {
     public Boolean resumingSave;
     public static Boolean needToSave = false;
     public static Boolean needToExit = false;
+    public static Boolean gameOverWin = false;
+    public static Boolean gameOverLose = false;
 
     /**
      * The sprite batch for everything except the map popup
@@ -347,6 +349,16 @@ public class GameScreen extends ScreenAdapter {
             exitGame();
         }
 
+        if(gameOverWin){
+            gameOverWin = false;
+            wonGame();
+        }
+
+        if(gameOverLose){
+            gameOverLose = false;
+            lostGame();
+        }
+
         //Show the map if the M key is pressed
         if (Gdx.input.isKeyPressed(Keys.M)){
             mapSpriteBatch.begin();
@@ -376,6 +388,19 @@ public class GameScreen extends ScreenAdapter {
     public void exitGame(){
         ambience.stop();
         game.setScreen(new TitleScreen(game, false));
+    }
+
+    public void wonGame(){
+        ambience.stop();
+        map.autoLeave(player);
+        game.setScreen(new GameEndScreen(game, true));
+
+    }
+
+    public void lostGame(){
+        ambience.stop();
+        map.autoLeave(player);
+        game.setScreen(new GameEndScreen(game, false));
     }
 
     public void saveGame() throws IOException {

@@ -197,7 +197,7 @@ public class Operative extends Actor {
     if (untargetedSystems.size() == 0){
       //End the game if there are none left
       if (Systems.systemsRemaining.size() == 0){
-        game.setScreen(new GameEndScreen(game, false));
+        GameScreen.gameOverLose = true;
       } else{
         target = Systems.systemsRemaining.get((int) Math.round(Math.random() * (Systems.systemsRemaining.size() - 1)));
       }
@@ -408,7 +408,7 @@ public class Operative extends Actor {
     }
 
     if (remainingOpers == 0){
-      game.setScreen(new GameEndScreen(game, true));
+      GameScreen.gameOverWin = true;
     }
 
     //Add a success notification in the heads up display
