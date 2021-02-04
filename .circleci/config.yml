@@ -44,7 +44,12 @@ jobs:
           path: build/test-results/test
           when: always
 
-      # run tests!
+      #Give permissions to build jar
+      - run:
+          name: chmod permissions
+          command: chmod +x ./gradlew
+
+      # build jar!
       - run:
           name: Assemble JAR
           command: |
