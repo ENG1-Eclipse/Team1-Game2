@@ -344,8 +344,7 @@ public class Player extends Actor {
      * Called when the player dies
      */
     public void onDeath(){
-        map.autoLeave(this);
-        game.setScreen(new GameEndScreen(game, false));
+        GameScreen.gameOverLose = true;
     }
 
     /**
