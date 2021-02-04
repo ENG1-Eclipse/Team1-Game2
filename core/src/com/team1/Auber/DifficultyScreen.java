@@ -19,6 +19,10 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Input.Keys;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 /**
  * TitleScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the title screen.
  *
@@ -182,8 +186,12 @@ public class DifficultyScreen extends ScreenAdapter {
                     GameEndScreen.menuMusic.stop();
                     menuSelect.play(0.2f);
                 }
-                /** Difficulty Easy, Demo Mode Enabled **/
-                game.setScreen(new GameScreen(game, 0, false,true));
+                /** Demo Mode Enabled - 0.25 chance of being NORMAL mode, 0.75 of being EASY. **/
+                ArrayList<Integer> randomDiffList = new ArrayList<>(Arrays.asList(0,0,0,1));
+                Random rand = new Random();
+                int randDiff = rand.nextInt(4);
+                int selectedDiff = randomDiffList.get(randDiff);
+                game.setScreen(new GameScreen(game, selectedDiff, false,true));
             }
         });
 
