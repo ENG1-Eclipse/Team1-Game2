@@ -15,16 +15,33 @@
  ******************************************************************************/
 
 package de.tomgrill.gdxtesting;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import com.badlogic.gdx.Gdx;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+@RunWith(GdxTestRunner.class)
 public class UnitTestExample {
+
+	JSONObject gameData;
+	JSONArray operArray;
 
 	@Test
 	public void oneEqualsOne() {
 		assertEquals(1, 1);
 	}
+
+	@Test
+	public void operativeEqualsEight() {
+		gameData = new JSONObject(Gdx.files.internal("../core/assets/mapdata.json").readString());
+		operArray = gameData.getJSONArray("operativeData");
+		int num_operatives = operArray.length();
+		assertEquals(8, num_operatives);
+	}
+
 
 }

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.tomgrill.gdxtesting.examples.AssetExistsExampleTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-01-28T12:49:17" hostname="ZEE-PC" time="0.005">
-  <properties/>
-  <testcase name="mapAssetsExist" classname="de.tomgrill.gdxtesting.examples.AssetExistsExampleTest" time="0.005"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
