@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package de.tomgrill.gdxtesting.examples;
+package de.tomgrill.gdxtesting;
 
 import static org.junit.Assert.assertTrue;
 
@@ -26,7 +26,7 @@ import com.badlogic.gdx.Gdx;
 import de.tomgrill.gdxtesting.GdxTestRunner;
 
 @RunWith(GdxTestRunner.class)
-public class AssetExistsExampleTest {
+public class AssetExistsTest {
 
 	@Test
 	//Checks that all necessary assets are present in the correct location
