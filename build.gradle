@@ -52,6 +52,17 @@ project(":desktop") {
         
     }
 
+    jar {
+        manifest {
+            attributes(
+
+                    'Main-Class': 'com.team1.Auber.desktop.DesktopLauncher'
+            )
+        }from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        }
+    }
+
 
 
 }
@@ -72,6 +83,8 @@ project(":core") {
 
                     'Main-Class': 'com.team1.Auber.desktop.DesktopLauncher'
             )
+        }from {
+            configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
         }
     }
 
