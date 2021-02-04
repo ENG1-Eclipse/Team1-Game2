@@ -48,9 +48,13 @@ public class GameScreen extends ScreenAdapter {
     public Boolean resumingSave;
     public static Boolean needToSave = false;
     public static Boolean needToExit = false;
+<<<<<<< Updated upstream
     public static Boolean gameOverWin = false;
     public static Boolean gameOverLose = false;
 
+=======
+    public Boolean demo = false;
+>>>>>>> Stashed changes
     /**
      * The sprite batch for everything except the map popup
      */
@@ -96,6 +100,19 @@ public class GameScreen extends ScreenAdapter {
      * @param game the AuberGame game
      */
     public GameScreen (AuberGame game, Integer difficulty, Boolean resumingSave){
+        this.demo = false;
+        this.difficulty = difficulty;
+        this.game = game;
+        this.resumingSave = resumingSave;
+        if(! AuberGame.isGameMuted){
+            ambience.play();
+            ambience.setLooping(true);
+            ambience.setVolume(0.7f);
+        }
+
+    }
+    public GameScreen (AuberGame game, Integer difficulty, Boolean resumingSave, Boolean demo){
+        this.demo = demo;
         this.difficulty = difficulty;
         this.game = game;
         this.resumingSave = resumingSave;
@@ -128,26 +145,27 @@ public class GameScreen extends ScreenAdapter {
         Player.game = game;
         Systems.game = game;
         Operative.game = game;
+        PlayerDemo.game = game;
 
         //Create the player and add it to the stage
-
-        if(! resumingSave){
-            player = new Player(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1), difficulty);
+        if(demo){
+            player = new PlayerDemo(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1), difficulty,this);
             stage.addActor(player);
         }else{
-            int newx = Math.round(prefs.getInteger("auberX") / 32);
-            int newy = Math.round(prefs.getInteger("auberY") / 32);
+            if(! resumingSave){
+                player = new Player(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1), difficulty);
+                stage.addActor(player);
+            }else{
+                int newx = Math.round(prefs.getInteger("auberX") / 32);
+                int newy = Math.round(prefs.getInteger("auberY") / 32);
 
-            player = new Player(map, newx, newy, difficulty);
-            stage.addActor(player);
+                player = new Player(map, newx, newy, difficulty);
+                stage.addActor(player);
 
-            player.setHealth(prefs.getInteger("auberHealth", 100));
-            player.setMaxHealth(prefs.getInteger("auberMaxHealth",100));
-
-
+                player.setHealth(prefs.getInteger("auberHealth", 100));
+                player.setMaxHealth(prefs.getInteger("auberMaxHealth",100));
+            }
         }
-
-
 
         //Create the Heads up display
         HUD = new HUD(player, gameData, game);

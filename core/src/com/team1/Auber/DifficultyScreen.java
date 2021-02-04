@@ -159,6 +159,34 @@ public class DifficultyScreen extends ScreenAdapter {
             }
         });
 
+        //Create the Demo button, add it to the table with its click event
+        ImageButton.ImageButtonStyle demoStyle =  new ImageButton.ImageButtonStyle();
+        demoStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/demoButtonInactive.png"))));
+        demoStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/demoButtonActive.png"))));
+        demoStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/demoButtonActive.png"))));
+        ImageButton demoButton = new ImageButton(demoStyle);
+        table.add(demoButton).center().pad(5);
+        table.row();
+
+        demoButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                //As per libGDX docs this is needed to return true for the touchup event to trigger
+                return true;
+            }
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                //Stop the music playing and change the screen to the game screen
+                if(! AuberGame.isGameMuted){
+                    menuMusic.stop();
+                    GameEndScreen.menuMusic.stop();
+                    menuSelect.play(0.2f);
+                }
+                /** Difficulty Easy, Demo Mode Enabled **/
+                game.setScreen(new GameScreen(game, 1, false,true));
+            }
+        });
+
 
 
         stage.addActor(table);
