@@ -348,7 +348,11 @@ public class PlayerDemo extends Player {
         target = gScreen.remainingOperatives.get(i);
         while(target.dead){
             i+=1;
-            target = gScreen.remainingOperatives.get(i);
+            if(i >= gScreen.remainingOperatives.size()){
+                break;
+            }else{
+                target = gScreen.remainingOperatives.get(i);
+            }
         }
 
         if(target != null){
