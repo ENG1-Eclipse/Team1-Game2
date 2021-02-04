@@ -273,9 +273,8 @@ public class PlayerDemo extends Player {
     /**
      * Called when the player dies
      */
-    public void onDeath() {
-        map.autoLeave(this);
-        game.setScreen(new GameEndScreen(game, false));
+    public void onDeath(){
+        GameScreen.gameOverLose = true;
     }
 
     /**

@@ -183,7 +183,7 @@ public class DifficultyScreen extends ScreenAdapter {
                     menuSelect.play(0.2f);
                 }
                 /** Difficulty Easy, Demo Mode Enabled **/
-                game.setScreen(new GameScreen(game, 1, false,true));
+                game.setScreen(new GameScreen(game, 0, false,true));
             }
         });
 

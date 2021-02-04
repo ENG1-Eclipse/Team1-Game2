@@ -406,65 +406,79 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void wonGame(){
-        ambience.stop();
-        map.autoLeave(player);
-        game.setScreen(new GameEndScreen(game, true));
+        if(demo){
+            ambience.stop();
+            game.setScreen(new TitleScreen(game, false));
+        }else{
+            ambience.stop();
+            map.autoLeave(player);
+            game.setScreen(new GameEndScreen(game, true));
+        }
 
     }
 
     public void lostGame(){
-        ambience.stop();
-        map.autoLeave(player);
-        game.setScreen(new GameEndScreen(game, false));
+        if(demo){
+            ambience.stop();
+            game.setScreen(new TitleScreen(game, false));
+        }else{
+            ambience.stop();
+            map.autoLeave(player);
+            game.setScreen(new GameEndScreen(game, false));
+        }
     }
 
     public void saveGame() throws IOException {
-        prefs.clear();
-        prefs.flush();
+        if(demo){
+            HUD.saveNotification("Can't save game in demo mode!");
+        }else{
+            prefs.clear();
+            prefs.flush();
 
-        ArrayList<ArrayList> savedOperatives = new ArrayList<>();
-        for(Operative remainingOper : remainingOperatives){
-            if(! remainingOper.dead){
-                ArrayList<Integer> thisOper = new ArrayList<>();
-                thisOper.add((int) remainingOper.getX());
-                thisOper.add((int) remainingOper.getY());
-                thisOper.add(remainingOper.specialAbilityID);
-                savedOperatives.add(thisOper);
+            ArrayList<ArrayList> savedOperatives = new ArrayList<>();
+            for(Operative remainingOper : remainingOperatives){
+                if(! remainingOper.dead){
+                    ArrayList<Integer> thisOper = new ArrayList<>();
+                    thisOper.add((int) remainingOper.getX());
+                    thisOper.add((int) remainingOper.getY());
+                    thisOper.add(remainingOper.specialAbilityID);
+                    savedOperatives.add(thisOper);
+                }
             }
+
+            ByteArrayOutputStream operOut = new ByteArrayOutputStream();
+            new ObjectOutputStream(operOut).writeObject(savedOperatives);
+            String operSaveString = Base64.getEncoder().encodeToString(operOut.toByteArray());
+            prefs.putString("remainingOperatives", operSaveString);
+
+            prefs.putInteger("auberX", (int) player.getX());
+            prefs.putInteger("auberY", (int) player.getY());
+            prefs.putInteger("auberHealth", player.getHealth());
+            prefs.putInteger("auberMaxHealth", player.getMaxHealth());
+
+            ArrayList<ArrayList<Object>> savedSystems = new ArrayList<>();
+            for(Systems remainingSystem : Systems.systemsRemaining){
+                ArrayList<Object> remainingSys = new ArrayList<>();
+                remainingSys.add(remainingSystem.gridX);
+                remainingSys.add(remainingSystem.gridY);
+                remainingSys.add(remainingSystem.roomName);
+                savedSystems.add(remainingSys);
+            }
+
+            ByteArrayOutputStream sysOut = new ByteArrayOutputStream();
+            new ObjectOutputStream(sysOut).writeObject(savedSystems);
+            String sysSaveString = Base64.getEncoder().encodeToString(sysOut.toByteArray());
+            prefs.putString("remainingSystems", sysSaveString);
+
+            prefs.putBoolean("canBeResumed", true);
+
+            prefs.putInteger("gameDifficulty", this.difficulty);
+
+            prefs.flush();
+
+            HUD.saveNotification("Game Saved Successfully");
+            HUD.saveNotification("Press ESC to exit game");
         }
-
-        ByteArrayOutputStream operOut = new ByteArrayOutputStream();
-        new ObjectOutputStream(operOut).writeObject(savedOperatives);
-        String operSaveString = Base64.getEncoder().encodeToString(operOut.toByteArray());
-        prefs.putString("remainingOperatives", operSaveString);
-
-        prefs.putInteger("auberX", (int) player.getX());
-        prefs.putInteger("auberY", (int) player.getY());
-        prefs.putInteger("auberHealth", player.getHealth());
-        prefs.putInteger("auberMaxHealth", player.getMaxHealth());
-
-        ArrayList<ArrayList<Object>> savedSystems = new ArrayList<>();
-        for(Systems remainingSystem : Systems.systemsRemaining){
-            ArrayList<Object> remainingSys = new ArrayList<>();
-            remainingSys.add(remainingSystem.gridX);
-            remainingSys.add(remainingSystem.gridY);
-            remainingSys.add(remainingSystem.roomName);
-            savedSystems.add(remainingSys);
-        }
-
-        ByteArrayOutputStream sysOut = new ByteArrayOutputStream();
-        new ObjectOutputStream(sysOut).writeObject(savedSystems);
-        String sysSaveString = Base64.getEncoder().encodeToString(sysOut.toByteArray());
-        prefs.putString("remainingSystems", sysSaveString);
-
-        prefs.putBoolean("canBeResumed", true);
-
-        prefs.putInteger("gameDifficulty", this.difficulty);
-
-        prefs.flush();
-
-        HUD.saveNotification("Game Saved Successfully");
-        HUD.saveNotification("Press ESC to exit game");
 
     }
 
