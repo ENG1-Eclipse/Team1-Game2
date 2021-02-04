@@ -52,14 +52,14 @@ jobs:
       # build jar!
       - run:
           name: Assemble JAR
-          command: |
+          command:
             # Skip this for other nodes
             if [ "$CIRCLE_NODE_INDEX" == 0 ]; then
             ./gradlew assemble
             fi
             # As the JAR was only assembled in the first build container, build/libs will be empty in all the other build containers.
-            - store_artifacts:
-                path: build/libs
+      - store_artifacts:
+            path: build/libs
 
 workflows:
     version: 2
