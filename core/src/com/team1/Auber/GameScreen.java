@@ -156,11 +156,12 @@ public class GameScreen extends ScreenAdapter {
                 int newx = Math.round(prefs.getInteger("auberX") / 32);
                 int newy = Math.round(prefs.getInteger("auberY") / 32);
 
-                player = new Player(map, newx, newy, difficulty);
+                player = new Player(map, newx, newy, difficulty, prefs.getFloat("auberSpeed"), prefs.getInteger("auberAttackDamage"), prefs.getBoolean("auberSpecialAttack"));
                 stage.addActor(player);
 
                 player.setHealth(prefs.getInteger("auberHealth", 100));
                 player.setMaxHealth(prefs.getInteger("auberMaxHealth",100));
+
             }
         }
 
@@ -455,6 +456,9 @@ public class GameScreen extends ScreenAdapter {
             prefs.putInteger("auberY", (int) player.getY());
             prefs.putInteger("auberHealth", player.getHealth());
             prefs.putInteger("auberMaxHealth", player.getMaxHealth());
+            prefs.putFloat("auberSpeed", player.getSpeed());
+            prefs.putInteger("auberAttackDamage", player.getDamage());
+            prefs.putBoolean("auberSpecialAttack", player.getSpecialAttack());
 
             ArrayList<ArrayList<Object>> savedSystems = new ArrayList<>();
             for(Systems remainingSystem : Systems.systemsRemaining){

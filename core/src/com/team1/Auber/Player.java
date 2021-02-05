@@ -116,6 +116,15 @@ public class Player extends Actor {
         setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
     }
 
+    public Player(MapRenderer map, int x, int y, Integer difficulty, Float savedSpeed, Integer savedAttackDamage, Boolean specialAttackEnabled){
+        this.difficulty = difficulty;
+        this.map = map;
+        setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
+        this.playerSpeed = savedSpeed;
+        this.attackDamage = savedAttackDamage;
+        this.enableAttack = specialAttackEnabled;
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
 
