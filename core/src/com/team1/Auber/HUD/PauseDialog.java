@@ -52,7 +52,9 @@ public class PauseDialog extends Dialog {
 
         text("Options: ").center();
         button("Resume", 0);
-        button("Save Game", 1);
+        if(! GameScreen.demo) {
+            button("Save Game", 1);
+        }
         button("Exit", 2);
     }
 

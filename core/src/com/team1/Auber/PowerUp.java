@@ -68,18 +68,20 @@ public class PowerUp extends Actor {
     }
 
     /**
-   * The ablity has been picked up
+   * The ability has been picked up
    *
    * @param by the actor that picked the powerup
    */
     public void onHit(Actor by) {
         if (by instanceof Player){
-            //Pickup ablity and apply effects
+            //Pickup ability and apply effects
             if(this.powerType == 0){
                 collected = true;
-                //Health boost pickup: increses player health by 
+                //Health boost pickup: increases player health by 20
+                float currentHealthPercent = (float) (((Player) by).getHealth()) / (((Player) by).getMaxHealth());
                 ((Player)by).setMaxHealth(((Player)by).getMaxHealth()+20);
-                ((Player)by).setHealth(((Player)by).getMaxHealth());
+                float newHealthPercent = (float) ((currentHealthPercent) * (((Player) by).getMaxHealth()));
+                ((Player)by).setHealth((int) newHealthPercent);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();

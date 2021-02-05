@@ -94,7 +94,7 @@ public class HUD extends Stage {
             @Override
             public boolean keyTyped(InputEvent event, char key)
             {
-                //if the letter to is typed the show the teleporter dialouge
+                //if the letter to is typed the show the teleporter dialog
                 if(key == 'E' || key == 'e'){
                     teleporterDialog.show(getStage());
 

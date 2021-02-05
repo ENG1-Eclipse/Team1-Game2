@@ -51,7 +51,7 @@ public class GameScreen extends ScreenAdapter {
     public static Boolean gameOverWin = false;
     public static Boolean gameOverLose = false;
 
-    public Boolean demo = false;
+    public static Boolean demo = false;
     /**
      * The sprite batch for everything except the map popup
      */
@@ -173,8 +173,11 @@ public class GameScreen extends ScreenAdapter {
 
         if(this.resumingSave){
          HUD.saveNotification("Save Loaded Successfully");
-         HUD.saveNotification("Welcome Back, Auber");
-         }else{
+            HUD.infoNotification("System Log resumed...");
+         }else if(this.demo){
+            HUD.infoNotification("Game in demo mode.");
+            HUD.infoNotification("System Log started...");
+        }else{
             HUD.infoNotification("System Log started...");
         }
 
