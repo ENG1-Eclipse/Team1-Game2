@@ -277,50 +277,48 @@ public class GameScreen extends ScreenAdapter {
 
         //--------------------------------------- P O W E R  U P S ---------------------------------------------------
         // Adding powerups to the map
-        PowerUp pUp;
-        /**
-         * Type    : Health Boost
-         * Location: Bathroom  
-         * Xpos    : 43
-         * Ypos    : 33
-         */
-        pUp = new PowerUp(map, 43, 33,0);
-        stage.addActor(pUp);
-        /**
-         * Type    : Health Boost
-         * Location: Stern Corridor  
-         * Xpos    : 17
-         * Ypos    : 13
-         */
-        pUp = new PowerUp(map, 17, 13,0);
-        stage.addActor(pUp);
 
-        /**
-         * Type    : Speed Boost
-         * Location: Lab
-         * Xpos    : 48
-         * Ypos    : 42
-         */
-        pUp = new PowerUp(map, 48, 42,1);
-        stage.addActor(pUp);
+        if(! resumingSave){
+            /** Type: Health Boost; Location : Bathroom; Xpos: 43; Ypos: 33 */
+            PowerUp pUp = new PowerUp(map, 43, 33,0);
+            stage.addActor(pUp);
+            /** Type: Health Boost; Location: Stern Corridor; Xpos: 17; Ypos: 13 */
+            PowerUp pUp2 = new PowerUp(map, 17, 13,0);
+            stage.addActor(pUp2);
 
-        /**
-         * Type    : Speed Boost
-         * Location: Storage Room
-         * Xpos    : 16
-         * Ypos    : 6
-         */
-        pUp = new PowerUp(map, 16, 6,1);
-        stage.addActor(pUp);
+            /** Type: Speed Boost; Location: Lab; Xpos: 48; Ypos: 42 */
+            PowerUp pUp3 = new PowerUp(map, 48, 42,1);
+            stage.addActor(pUp3);
 
-        /**
-         * Type    : Special Attack
-         * Location: MedBay
-         * Xpos    : 18
-         * Ypos    : 33
-         */
-        pUp = new PowerUp(map, 18, 33,3);
-        stage.addActor(pUp);
+            /** Type: Speed Boost; Location: Storage Room; Xpos: 16; Ypos: 6 */
+            PowerUp pUp4 = new PowerUp(map, 16, 6,1);
+            stage.addActor(pUp4);
+
+            /** Type: Special Attack; Location: MedBay; Xpos: 18; Ypos : 33 */
+            PowerUp pUp5 = new PowerUp(map, 18, 33,3);
+            stage.addActor(pUp5);
+        }else{
+            String pupSaveString = prefs.getString("remainingPowerups");
+            ByteArrayInputStream pupIn = new ByteArrayInputStream(Base64.getDecoder().decode(pupSaveString));
+            ArrayList<ArrayList> pupInList = null;
+            try {
+                Object pupInObj = new ObjectInputStream(pupIn).readObject();
+                pupInList = (ArrayList<ArrayList>) pupInObj;
+            }catch (ClassNotFoundException | IOException e){
+                e.printStackTrace();
+            }
+
+            assert pupInList != null;
+
+            for (ArrayList arrayList : pupInList){
+                float newx = (float) arrayList.get(0);
+                float newy = (float) arrayList.get(1);
+                int newtype = (int) arrayList.get(2);
+                PowerUp pUp = new PowerUp(map, newx, newy, newtype);
+                stage.addActor(pUp);
+            }
+
+        }
     }
 
     @Override
@@ -446,7 +444,6 @@ public class GameScreen extends ScreenAdapter {
                     savedOperatives.add(thisOper);
                 }
             }
-
             ByteArrayOutputStream operOut = new ByteArrayOutputStream();
             new ObjectOutputStream(operOut).writeObject(savedOperatives);
             String operSaveString = Base64.getEncoder().encodeToString(operOut.toByteArray());
@@ -468,11 +465,23 @@ public class GameScreen extends ScreenAdapter {
                 remainingSys.add(remainingSystem.roomName);
                 savedSystems.add(remainingSys);
             }
-
             ByteArrayOutputStream sysOut = new ByteArrayOutputStream();
             new ObjectOutputStream(sysOut).writeObject(savedSystems);
             String sysSaveString = Base64.getEncoder().encodeToString(sysOut.toByteArray());
             prefs.putString("remainingSystems", sysSaveString);
+
+            ArrayList<ArrayList<Object>> savedPowerUps = new ArrayList<>();
+            for (PowerUp remainingPowerUp : PowerUp.powerupsRemaining){
+                ArrayList<Object> remainingPUP = new ArrayList<>();
+                remainingPUP.add(remainingPowerUp.xPos);
+                remainingPUP.add(remainingPowerUp.yPos);
+                remainingPUP.add(remainingPowerUp.powerType);
+                savedPowerUps.add(remainingPUP);
+            }
+            ByteArrayOutputStream pupOut = new ByteArrayOutputStream();
+            new ObjectOutputStream(pupOut).writeObject(savedPowerUps);
+            String pupSaveString = Base64.getEncoder().encodeToString(pupOut.toByteArray());
+            prefs.putString("remainingPowerups", pupSaveString);
 
             prefs.putBoolean("canBeResumed", true);
 
@@ -492,7 +501,7 @@ public class GameScreen extends ScreenAdapter {
      * @param x x pos
      * @param y y pos
      * @param type powerup type
-     * 
+     *
      */
     void createPowerUp(Float x, Float y,int type){
         //Drop Powerup on death

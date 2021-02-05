@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.lang.Math;
+import java.util.ArrayList;
 
 /**
  * @author Jamie Hewison (Team 1)
@@ -26,6 +27,8 @@ public class PowerUp extends Actor {
     float xPos;
     float yPos;
 
+    public static ArrayList<PowerUp> powerupsRemaining = new ArrayList<PowerUp>();
+
     /**
      * Create the powerup
      *
@@ -40,6 +43,7 @@ public class PowerUp extends Actor {
         this.map = map;
         xPos = map.worldPos(x);
         yPos = map.worldPos(y);
+        powerupsRemaining.add(this);
         setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
         map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
     }
@@ -50,6 +54,7 @@ public class PowerUp extends Actor {
         this.map = map;
         xPos = x;
         yPos = y;
+        powerupsRemaining.add(this);
         setBounds(xPos, yPos, 20f, 20f);
         map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
     }
@@ -76,12 +81,14 @@ public class PowerUp extends Actor {
                 //Health boost pickup: increses player health by 
                 ((Player)by).setMaxHealth(((Player)by).getMaxHealth()+20);
                 ((Player)by).setHealth(((Player)by).getMaxHealth());
+                powerupsRemaining.remove(this);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();
             }else if(this.powerType == 1){
                 //Speed Boost
                 ((Player)by).setSpeed(((Player)by).getSpeed()*1.1f);
+                powerupsRemaining.remove(this);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();
@@ -90,6 +97,7 @@ public class PowerUp extends Actor {
             else if(this.powerType == 2){
                 //Attack Boost +5 hit damage
                 ((Player)by).setDamage(((Player)by).getDamage()+5);
+                powerupsRemaining.remove(this);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();
@@ -98,6 +106,7 @@ public class PowerUp extends Actor {
             else if(this.powerType == 3){
                 //Special Attack is enabled by this
                 ((Player)by).enableSpecialAttack();
+                powerupsRemaining.remove(this);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();
@@ -106,6 +115,7 @@ public class PowerUp extends Actor {
             else if(this.powerType == 4){
                 //Health Regen for 15 seconds
                 ((Player)by).startRegen(15);
+                powerupsRemaining.remove(this);
                 map.autoLeave(this);
                 remove();
                 powerUpTexture.dispose();
