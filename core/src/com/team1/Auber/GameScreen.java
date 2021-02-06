@@ -22,6 +22,7 @@ import com.team1.Auber.Smoke.Smoke;
 
 import org.json.*;
 import java.util.Base64;
+import java.util.Random;
 
 import javax.print.FlavorException;
 
@@ -334,7 +335,12 @@ public class GameScreen extends ScreenAdapter {
 
         }
 
-
+        //The first random operative for the demo player to attack
+        //After the first, the demo player will auto-generate the next one
+        if(demo){
+            Random rand = new Random();
+            PlayerDemo.randOper = rand.nextInt(remainingOperatives.size());
+        }
 
     }
 

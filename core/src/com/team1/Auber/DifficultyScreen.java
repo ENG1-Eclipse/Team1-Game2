@@ -186,10 +186,10 @@ public class DifficultyScreen extends ScreenAdapter {
                     GameEndScreen.menuMusic.stop();
                     menuSelect.play(0.2f);
                 }
-                /** Demo Mode Enabled - 0.25 chance of being NORMAL mode, 0.75 of being EASY. **/
-                ArrayList<Integer> randomDiffList = new ArrayList<>(Arrays.asList(0,0,0,1));
+                /** Demo Mode Enabled - 0.4 chance of being NORMAL mode, 0.6 of being EASY. **/
+                ArrayList<Integer> randomDiffList = new ArrayList<>(Arrays.asList(0,0,0,1,1));
                 Random rand = new Random();
-                int randDiff = rand.nextInt(4);
+                int randDiff = rand.nextInt(5);
                 int selectedDiff = randomDiffList.get(randDiff);
                 game.setScreen(new GameScreen(game, selectedDiff, false,true));
             }
