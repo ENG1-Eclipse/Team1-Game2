@@ -181,7 +181,28 @@ public class PlayerDemo extends Player {
                 }
 
                 // do the attack
-                if (attackDelay == 0) {
+                if(specialAttackDelay == 0 && enableAttack) {
+                    float xAtt2 = getX() - 12f-32f;
+                    float yAtt2 = getY() - 6f-32f;
+
+                    Operative target = null;
+                    for (Actor thing : map.InArea(xAtt2, yAtt2, 96f, 96f)) {
+                        if (thing instanceof Operative){
+                            target = (Operative) thing;
+                            target.onHit(this, (int)(attackDamage*damageMulti));
+                            if(! AuberGame.isGameMuted){
+                                punch1.play(0.20f);
+                            }
+
+                        }else if(thing instanceof PowerUp){
+                            ((PowerUp)thing).onHit(this);
+                        }
+                    }
+                    specialAttackDelay = 20;
+                    //display attack
+                    batch.draw(specialAttack,xAtt, yAtt, 96f, 96f);
+                }
+                else if (attackDelay == 0) {
                     Operative targetHit = null;
                     for (Actor thing : map.InArea(xAtt, yAtt, wAtt, wAtt)) {
                         if (thing instanceof Operative) {
