@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.team1.Auber.HUD.HUD;
 
 import java.lang.Math;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class PowerUp extends Actor {
     public MapRenderer map;
     private final Texture powerUpTexture;
     int powerType;
+    HUD hud;
     private final String powerUpNames[] = {"health","speed","strength","specialAttackPowerUp","regen"};
 
     float xPos;
@@ -36,8 +38,9 @@ public class PowerUp extends Actor {
      * @param x the starting X coordinate
      * @param y the starting Y coordinate
      * @param powerUpType Number of the power up type. 0:Health 1:Speed 2:strength
+     * @param newhud the HUD of the game being played
      */
-    public PowerUp(MapRenderer map, int x, int y,int powerUpType){
+    public PowerUp(MapRenderer map, int x, int y,int powerUpType, HUD newhud){
         powerType = powerUpType;
         powerUpTexture = new Texture(Gdx.files.internal("img/powerUps/"+powerUpNames[powerUpType]+".png"));
         this.map = map;
@@ -45,9 +48,10 @@ public class PowerUp extends Actor {
         yPos = map.worldPos(y);
         setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
         map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
+        hud = newhud;
     }
     //Alternative constructor using Floats
-    public PowerUp(MapRenderer map, Float x, Float y,int powerUpType){
+    public PowerUp(MapRenderer map, Float x, Float y,int powerUpType, HUD newhud){
         powerType = powerUpType;
         powerUpTexture = new Texture(Gdx.files.internal("img/powerUps/"+powerUpNames[powerUpType]+".png"));
         this.map = map;
@@ -55,6 +59,7 @@ public class PowerUp extends Actor {
         yPos = y;
         setBounds(xPos, yPos, 20f, 20f);
         map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
+        hud = newhud;
     }
 
     float time;
@@ -77,6 +82,7 @@ public class PowerUp extends Actor {
             //Pickup ability and apply effects
             if(this.powerType == 0){
                 collected = true;
+                hud.gameNotification("You picked up a health boost!");
                 //Health boost pickup: increases player health by 20
                 float currentHealthPercent = (float) (((Player) by).getHealth()) / (((Player) by).getMaxHealth());
                 ((Player)by).setMaxHealth(((Player)by).getMaxHealth()+20);
@@ -87,6 +93,7 @@ public class PowerUp extends Actor {
                 powerUpTexture.dispose();
             }else if(this.powerType == 1){
                 collected = true;
+                hud.gameNotification("You picked up a speed boost!");
                 //Speed Boost
                 ((Player)by).setSpeed(((Player)by).getSpeed()*1.1f);
                 map.autoLeave(this);
@@ -96,6 +103,7 @@ public class PowerUp extends Actor {
             }
             else if(this.powerType == 2){
                 collected = true;
+                hud.gameNotification("You picked up an attack boost!");
                 //Attack Boost +5 hit damage
                 ((Player)by).setDamage(((Player)by).getDamage()+5);
                 map.autoLeave(this);
@@ -105,6 +113,8 @@ public class PowerUp extends Actor {
             }
             else if(this.powerType == 3){
                 collected = true;
+                hud.gameNotification("You unlocked the Special Attack!");
+                hud.gameNotification("Press F to use it.");
                 //Special Attack is enabled by this
                 ((Player)by).enableSpecialAttack();
                 map.autoLeave(this);
@@ -114,6 +124,7 @@ public class PowerUp extends Actor {
             }
             else if(this.powerType == 4){
                 collected = true;
+                hud.gameNotification("You picked up 15 secs of health regen!");
                 //Health Regen for 15 seconds
                 ((Player)by).startRegen(15);
                 map.autoLeave(this);

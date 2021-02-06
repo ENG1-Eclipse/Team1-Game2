@@ -288,26 +288,26 @@ public class GameScreen extends ScreenAdapter {
         if(! resumingSave){
             //Create the default power ups
             /** Type: Health Boost; Location : Bathroom; Xpos: 43; Ypos: 33 */
-            PowerUp pUp = new PowerUp(map, 43, 33,0);
+            PowerUp pUp = new PowerUp(map, 43, 33,0, this.HUD);
             stage.addActor(pUp);
             this.remainingPowerups.add(pUp);
             /** Type: Health Boost; Location: Stern Corridor; Xpos: 17; Ypos: 13 */
-            PowerUp pUp2 = new PowerUp(map, 17, 13,0);
+            PowerUp pUp2 = new PowerUp(map, 17, 13,0, this.HUD);
             stage.addActor(pUp2);
             this.remainingPowerups.add(pUp2);
 
             /** Type: Speed Boost; Location: Lab; Xpos: 48; Ypos: 42 */
-            PowerUp pUp3 = new PowerUp(map, 48, 42,1);
+            PowerUp pUp3 = new PowerUp(map, 48, 42,1, this.HUD);
             stage.addActor(pUp3);
             this.remainingPowerups.add(pUp3);
 
             /** Type: Speed Boost; Location: Storage Room; Xpos: 16; Ypos: 6 */
-            PowerUp pUp4 = new PowerUp(map, 16, 6,1);
+            PowerUp pUp4 = new PowerUp(map, 16, 6,1, this.HUD);
             stage.addActor(pUp4);
             this.remainingPowerups.add(pUp4);
 
             /** Type: Special Attack; Location: MedBay; Xpos: 18; Ypos : 33 */
-            PowerUp pUp5 = new PowerUp(map, 18, 33,3);
+            PowerUp pUp5 = new PowerUp(map, 18, 33,3, this.HUD);
             stage.addActor(pUp5);
             this.remainingPowerups.add(pUp5);
         }else{
@@ -328,7 +328,7 @@ public class GameScreen extends ScreenAdapter {
                 float newx = (float) arrayList.get(0);
                 float newy = (float) arrayList.get(1);
                 int newtype = (int) arrayList.get(2);
-                PowerUp pUp = new PowerUp(map, newx, newy, newtype);
+                PowerUp pUp = new PowerUp(map, newx, newy, newtype, this.HUD);
                 stage.addActor(pUp);
                 this.remainingPowerups.add(pUp);
             }
@@ -537,7 +537,7 @@ public class GameScreen extends ScreenAdapter {
     void createPowerUp(Float x, Float y,int type){
         //Drop Powerup on death
         PowerUp pUp;
-        pUp = new PowerUp(map, x, y,type);
+        pUp = new PowerUp(map, x, y,type, this.HUD);
         stage.addActor(pUp);
         this.remainingPowerups.add(pUp);
     }
