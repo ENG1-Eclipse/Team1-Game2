@@ -1,5 +1,6 @@
 package com.team1.Auber;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Null;
@@ -22,8 +23,8 @@ import java.lang.Math;
  * @author Robert Watts (Team 4)
  * @author Adam Wiegand (Team 4)
  * @author Bogdan Bodnariu-Lescinschi (Team 4)
- *
- * @@author Harry Smith (Team 1 - Implement Difficulty)
+ * @author Harry Smith (Team 1)
+ * @author Jamie Hewison (Team 1)
  */
 
 public class PlayerDemo extends Player {
@@ -125,24 +126,30 @@ public class PlayerDemo extends Player {
     @Override
     public void draw(Batch batch, float parentAlpha) {
 
-        // Regen
-        if (regenTimer > 0) {
-            regenTimer -= Gdx.graphics.getDeltaTime();
-            regenCounter += Gdx.graphics.getDeltaTime();
-            if (regenCounter >= regenRate) {
-                if (health < maxHealth) {
-                    health += 1;
-                }
+        // Regen Power Up
+        if(!GameScreen.gamePaused){
+            if (regenTimer > 0) {
+                regenTimer -= Gdx.graphics.getDeltaTime();
+                regenCounter += Gdx.graphics.getDeltaTime();
+                if (regenCounter >= regenRate) {
+                    if (health < maxHealth) {
+                        health += 1;
+                    }
 
-                regenCounter = 0;
+                    regenCounter = 0;
+                }
             }
         }
 
         // Demo AI code: Copy of operative AI but targets are Operatives
         if(target == null){
-            chooseTarget();
+            if(!GameScreen.gamePaused) {
+                chooseTarget();
+            }
         }else{
-            move();
+            if(!GameScreen.gamePaused){
+                move();
+            }
         }
         // If target is close enough attack
         if(target != null){
@@ -208,7 +215,7 @@ public class PlayerDemo extends Player {
         // attack delay
         if (attackDelay > 0) {
             /**
-             * Changed timeing to be based off the delta time rather than frame numbers
+             * Changed timing to be based off the delta time rather than frame numbers
              */
             attackDelay -= Gdx.graphics.getDeltaTime();
 
@@ -225,11 +232,13 @@ public class PlayerDemo extends Player {
         }
 
         // Player Health
-        if (map.Effect(2, this)) {
-            healthTimer += Gdx.graphics.getDeltaTime();
-            if (healthTimer >= 0.1f && health < maxHealth) {
-                health += 1;
-                healthTimer = 0f;
+        if(!GameScreen.gamePaused){
+            if (map.Effect(2, this)) {
+                healthTimer += Gdx.graphics.getDeltaTime();
+                if (healthTimer >= 0.1f && health < maxHealth) {
+                    health += 1;
+                    healthTimer = 0f;
+                }
             }
         }
 

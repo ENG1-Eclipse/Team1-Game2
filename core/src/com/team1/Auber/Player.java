@@ -17,8 +17,7 @@ import java.lang.Math;
  * @author Robert Watts (Team 4)
  * @author Adam Wiegand (Team 4)
  * @author Bogdan Bodnariu-Lescinschi (Team 4)
- *
- * @@author Harry Smith (Team 1 - Implement Difficulty)
+ * @@author Harry Smith (Team 1)
  */
 
 public class Player extends Actor {
@@ -116,6 +115,17 @@ public class Player extends Actor {
         setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
     }
 
+    /**
+     * Create the player when resuming from save, to keep powerups
+     *
+     * @param map the map
+     * @param x the starting X coordinate
+     * @param y the starting Y coordinate
+     * @param difficulty the difficulty of the game
+     * @param savedSpeed Auber's movement speed
+     * @param savedAttackDamage the damage Auber does with a hit
+     * @param specialAttackEnabled whether or not Auber has access to the special attack
+     */
     public Player(MapRenderer map, int x, int y, Integer difficulty, Float savedSpeed, Integer savedAttackDamage, Boolean specialAttackEnabled){
         this.difficulty = difficulty;
         this.map = map;
@@ -128,16 +138,18 @@ public class Player extends Actor {
     @Override
     public void draw(Batch batch, float parentAlpha) {
 
-        // Regen
+        // Regen Power Up
         if(regenTimer>0){
-            regenTimer -= Gdx.graphics.getDeltaTime();
-            regenCounter += Gdx.graphics.getDeltaTime();
-            if(regenCounter >= regenRate){
-                if(health<maxHealth){
-                    health +=1;
-                }
+            if(! GameScreen.gamePaused){
+                regenTimer -= Gdx.graphics.getDeltaTime();
+                regenCounter += Gdx.graphics.getDeltaTime();
+                if(regenCounter >= regenRate){
+                    if(health<maxHealth){
+                        health +=1;
+                    }
 
-                regenCounter = 0;
+                    regenCounter = 0;
+                }
             }
         }
 
@@ -145,17 +157,19 @@ public class Player extends Actor {
         //Move the player by a set amount if the keys are pressed.
         float deltaX = 0;
         float deltaY = 0;
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            deltaY += playerSpeed;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            deltaY -= playerSpeed;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            deltaX -= playerSpeed;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            deltaX += playerSpeed;
+        if(! GameScreen.gamePaused){
+            if(Gdx.input.isKeyPressed(Input.Keys.W)){
+                deltaY += playerSpeed;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.S)){
+                deltaY -= playerSpeed;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                deltaX -= playerSpeed;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.D)){
+                deltaX += playerSpeed;
+            }
         }
 
         //Check the space is empty before moving into it
@@ -198,35 +212,75 @@ public class Player extends Actor {
         }
 
         //If the space bar is down attack
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            float xAtt = getX() - 12f;
-            float yAtt = getY() - 6f;
+        if(! GameScreen.gamePaused){
+            if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+                float xAtt = getX() - 12f;
+                float yAtt = getY() - 6f;
 
-            //assuming the imageAttack square so just get the width
-            float wAtt = imageAttack.getWidth();
+                //assuming the imageAttack square so just get the width
+                float wAtt = imageAttack.getWidth();
 
-            //What direction to attack in?
-            if(currentImage == imageRight){
-                //attack right
-                xAtt += 32;
-            }else if (currentImage == imageLeft) {
-                //attack left
-                xAtt -= 32;
-            }else if(currentImage == imageUp){
-                //attack up
-                yAtt  += 32;
-            }else if (currentImage == imageDown) {
-                //attack down
-                yAtt  -= 32;
+                //What direction to attack in?
+                if(currentImage == imageRight){
+                    //attack right
+                    xAtt += 32;
+                }else if (currentImage == imageLeft) {
+                    //attack left
+                    xAtt -= 32;
+                }else if(currentImage == imageUp){
+                    //attack up
+                    yAtt  += 32;
+                }else if (currentImage == imageDown) {
+                    //attack down
+                    yAtt  -= 32;
+                }
+
+                //do the attack
+                if (attackDelay == 0){
+                    Operative target = null;
+                    for (Actor thing : map.InArea(xAtt, yAtt, wAtt, wAtt)) {
+                        if (thing instanceof Operative){
+                            target = (Operative) thing;
+                            target.onHit(this, attackDamage);
+                            if(! AuberGame.isGameMuted){
+                                punch1.play(0.20f);
+                            }
+
+                        }else if(thing instanceof PowerUp){
+                            ((PowerUp)thing).onHit(this);
+                        }
+                    }
+                    if (target == null) {
+                        if(! AuberGame.isGameMuted){
+                            swing.play(0.45f);
+                        }
+
+                    }
+                    /**
+                     * Attack delay now in seconds
+                     */
+
+                    attackDelay = 2f;
+                    //display attack
+                    batch.draw(imageAttack, xAtt, yAtt, wAtt, wAtt);
+                } else {
+                    //display uncharged attack
+                    batch.draw(imageTarget, xAtt, yAtt, wAtt, wAtt);
+                }
             }
+        }
+        //If F is pressed, do special attack
+        if(!GameScreen.gamePaused){
+            if(Gdx.input.isKeyPressed(Input.Keys.F) && specialAttackDelay == 0 && enableAttack){
+                //do the attack
+                float xAtt = getX() - 12f-32f;
+                float yAtt = getY() - 6f-32f;
 
-            //do the attack
-            if (attackDelay == 0){
                 Operative target = null;
-                for (Actor thing : map.InArea(xAtt, yAtt, wAtt, wAtt)) {
+                for (Actor thing : map.InArea(xAtt, yAtt, 96f, 96f)) {
                     if (thing instanceof Operative){
                         target = (Operative) thing;
-                        target.onHit(this, attackDamage);
+                        target.onHit(this, (int)(attackDamage*damageMulti));
                         if(! AuberGame.isGameMuted){
                             punch1.play(0.20f);
                         }
@@ -241,62 +295,29 @@ public class Player extends Actor {
                     }
 
                 }
-                /**
-                 * Attack delay now in seconds
-                 */
-
-                attackDelay = 2f;
+                specialAttackDelay = 20;
                 //display attack
-                batch.draw(imageAttack, xAtt, yAtt, wAtt, wAtt);
-            } else {
-                //display uncharged attack
-                batch.draw(imageTarget, xAtt, yAtt, wAtt, wAtt);
+                batch.draw(specialAttack,xAtt, yAtt, 96f, 96f);
             }
         }
-        //If the F is down large attack attack
-        if(Gdx.input.isKeyPressed(Input.Keys.F) && specialAttackDelay == 0 && enableAttack){
-            //do the attack
-            float xAtt = getX() - 12f-32f;
-            float yAtt = getY() - 6f-32f;
-
-            Operative target = null;
-            for (Actor thing : map.InArea(xAtt, yAtt, 96f, 96f)) {
-                if (thing instanceof Operative){
-                    target = (Operative) thing;
-                    target.onHit(this, (int)(attackDamage*damageMulti));
-                    if(! AuberGame.isGameMuted){
-                        punch1.play(0.20f);
-                    }
-
-                }else if(thing instanceof PowerUp){
-                    ((PowerUp)thing).onHit(this);
-                }
-            }
-            if (target == null) {
-                if(! AuberGame.isGameMuted){
-                    swing.play(0.45f);
-                }
-
-            }
-            specialAttackDelay = 20;
-            //display attack
-            batch.draw(specialAttack,xAtt, yAtt, 96f, 96f);
-        }
 
 
 
-        //attack delay
+        //Attack delay
         if (attackDelay > 0){
             /**
-             * Changed timeing to be based off the delta time rather than frame numbers
+             * Changed timing to be based off the delta time rather than frame numbers
              *  */
             attackDelay -= Gdx.graphics.getDeltaTime();
             
         }
         if(specialAttackDelay > 0){
-            specialAttackDelay -= Gdx.graphics.getDeltaTime();
+            if(!GameScreen.gamePaused){
+                specialAttackDelay -= Gdx.graphics.getDeltaTime();
+            }
         }
 
+        //Set delay to 0 if it ends up less than 0
         if(attackDelay < 0){
             attackDelay = 0;
         }
@@ -305,11 +326,13 @@ public class Player extends Actor {
         }
 
         //Player Health
-        if (map.Effect(2,this)){
-            healthTimer += Gdx.graphics.getDeltaTime();
-            if(healthTimer >= 0.1f && health < maxHealth) {
-                health += 1;
-                healthTimer = 0f;
+        if(! GameScreen.gamePaused){
+            if (map.Effect(2,this)){
+                healthTimer += Gdx.graphics.getDeltaTime();
+                if(healthTimer >= 0.1f && health < maxHealth) {
+                    health += 1;
+                    healthTimer = 0f;
+                }
             }
         }
 

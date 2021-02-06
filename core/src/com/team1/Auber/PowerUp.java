@@ -46,7 +46,7 @@ public class PowerUp extends Actor {
         setBounds(map.worldPos(x), map.worldPos(y), 20f, 20f);
         map.autoEnter(this,getX(),getY(), getWidth(), getHeight());
     }
-    
+    //Alternative constructor using Floats
     public PowerUp(MapRenderer map, Float x, Float y,int powerUpType){
         powerType = powerUpType;
         powerUpTexture = new Texture(Gdx.files.internal("img/powerUps/"+powerUpNames[powerUpType]+".png"));

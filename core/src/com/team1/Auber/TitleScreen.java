@@ -25,8 +25,7 @@ import com.badlogic.gdx.Input.Keys;
  *
  * @author Robert Watts (Team 4)
  * @author Bogdan Bodnariu-Lescinschi (Team 4)
- *
- * @author Harry Smith (Team 1 - Implement Difficulty)
+ * @author Harry Smith (Team 1)
  */
 public class TitleScreen extends ScreenAdapter {
 
@@ -55,6 +54,7 @@ public class TitleScreen extends ScreenAdapter {
      */
     private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
 
+    //Saved Game
     Preferences prefs = Gdx.app.getPreferences("Auber");
 
 
@@ -115,12 +115,14 @@ public class TitleScreen extends ScreenAdapter {
                     menuSelect.play(0.2f);
                 }
 
-
+                //Get whether or not a saved game can be resumed
                 Boolean resumeAvailable = prefs.getBoolean("canBeResumed", false);
 
                 if(! resumeAvailable){
+                    //Go to difficulty screen if needing to start a new game
                     game.setScreen((new DifficultyScreen(game)));
                 }else{
+                    //Go to the resume screen
                     int resDiff = prefs.getInteger("gameDifficulty", 0);
                     game.setScreen(new ResumeScreen(game, resDiff));
                 }
@@ -165,6 +167,7 @@ public class TitleScreen extends ScreenAdapter {
         final ImageButton muteButton = new ImageButton(unmutedStyle);
 
         if(AuberGame.isGameMuted ==  true){
+            //Set the style of the button based on whether the game is muted or not
             muteButton.setStyle(mutedStyle);
         }
 
@@ -217,7 +220,7 @@ public class TitleScreen extends ScreenAdapter {
                 if(! AuberGame.isGameMuted){
                     menuSelect.play(0.2f);
                 }
-
+                //Exit the game
                 Gdx.app.exit();
             }
         });

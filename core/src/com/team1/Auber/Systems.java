@@ -11,7 +11,6 @@ import com.team1.Auber.HUD.HUD;
  * @author Adam Wiegand (Team 4)
  * @author Robert Watts (Team 4)
  * @author Bogdan Bodnariu-Lescinschi (Team 4)
- *
  * @author Harry Smith (Team 1)
  */
 public class Systems extends Actor {

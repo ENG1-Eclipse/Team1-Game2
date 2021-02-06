@@ -9,7 +9,7 @@ import com.team1.Auber.MapRenderer;
  * A representation of a node with in the map. This could the starting position of a operative, or the position of a system. A node is a
  * starting point or destination on the map.
  *
- * @author Adam Wiegrand
+ * @author Adam Wiegrand (Team 4)
  */
 public class GridNode {
     protected MapRenderer map;

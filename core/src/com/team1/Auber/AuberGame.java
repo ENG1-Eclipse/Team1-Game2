@@ -10,8 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  * helper methods for this purpose ({@link com.badlogic.gdx.Game#setScreen}),
  * alongside an implementation of {@link com.badlogic.gdx.Game} for use.
  *
- * @author Robert Watts
- * @author Bogdan Bodnariu-Lescinschi
+ * @author Robert Watts (Team 4)
+ * @author Bogdan Bodnariu-Lescinschi (Team 4)
+ * @author Harry Smith (Team 1)
  */
 public class AuberGame extends Game {
 

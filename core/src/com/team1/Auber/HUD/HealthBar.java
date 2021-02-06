@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Draws a rectangular health bar with black background. The start value is 100% with the current value
  * being the value that changes as the health changes.
  *
- * @author Robert Watts
+ * @author Robert Watts (Team 4)
  */
 public class HealthBar extends Actor {
 

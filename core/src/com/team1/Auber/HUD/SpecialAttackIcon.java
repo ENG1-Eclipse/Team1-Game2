@@ -11,6 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Texture;
 import com.team1.Auber.Player;
 
+/**
+ * Draws the health bar of the game
+ *
+ * @author Jamie Hewison (Team 1)
+ */
+
 public class SpecialAttackIcon extends Actor {
 
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -66,7 +72,8 @@ public class SpecialAttackIcon extends Actor {
             font.getData().setScale(textScale);
             setFontScale = false;
         }
-        
+
+        //Checks whether the player can use the special attack
         if(player.getSpecialAttack()){
             if(player.canSpecialAttack()){
                 font.setColor(0,1,0,1f);

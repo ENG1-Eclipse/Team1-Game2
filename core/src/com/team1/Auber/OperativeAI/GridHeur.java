@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  A {@code Heuristic} generates estimates of the cost to move from a given node to the goal.
  *
- * @author Adam Wiegrand
+ * @author Adam Wiegrand (Team 4)
  */
 public class GridHeur implements Heuristic<GridNode>{
     @Override

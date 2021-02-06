@@ -13,7 +13,7 @@ import com.team1.Auber.Player;
 /**
  * Draws the health bar of the game
  *
- * @author Robert Watts
+ * @author Robert Watts (Team 4)
  */
 public class PlayerHealthBar extends Actor {
 

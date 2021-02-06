@@ -22,7 +22,8 @@ import com.badlogic.gdx.audio.Music;
 /**
  * GameEndScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the end game screen.
  *
- * @author Bogdan Bodnariu-Lescinschi
+ * @author Bogdan Bodnariu-Lescinschi (Team 4)
+ * @author Harry Smith (Team 1)
  */
 public class GameEndScreen extends ScreenAdapter {
     public AuberGame game;
@@ -56,6 +57,7 @@ public class GameEndScreen extends ScreenAdapter {
         this.game = game;
         this.playerWon = playerWon;
 
+        //The game has been outright won or lost, so the save should be erased.
         prefs.clear();
         prefs.flush();
     }
