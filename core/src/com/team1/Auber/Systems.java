@@ -95,6 +95,10 @@ public class Systems extends Actor {
             //edit the delay % X to change rate of healing, fps/X = hps
             health += 1;
         }
+
+        if(currentNotification != 0 && health == healthMax){
+            currentNotification = 0;
+        }
     }
 
     /**
