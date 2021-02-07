@@ -400,10 +400,14 @@ public class Operative extends Actor {
   public void onDeath(){
     // Create a powerup on death if of type: 2
     if(this.specialAbilityID == 2){
+      //Drop an attack powerup
       gameScreen.createPowerUp(getX(), getY(), 2);
     }else if(this.specialAbilityID == 1){
       // Drop a regen powerup
       gameScreen.createPowerUp(getX(), getY(), 4);
+    }else if(this.specialAbilityID == 3){
+      // Drop a speed powerup
+      gameScreen.createPowerUp(getX(), getY(), 1);
     }
     dead = true;
     map.autoLeave(this,getX(),getY(), getWidth(), getHeight());

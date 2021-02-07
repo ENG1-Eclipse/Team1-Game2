@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Texture;
+import com.team1.Auber.GameScreen;
 import com.team1.Auber.Player;
 
 /**
- * Draws the health bar of the game
+ * Draws the special attack indicator
  *
  * @author Jamie Hewison (Team 1)
+ * @author Harry Smith (Team 1)
  */
 
 public class SpecialAttackIcon extends Actor {
@@ -57,7 +59,7 @@ public class SpecialAttackIcon extends Actor {
     /**
      * Draw the special attack.
      *
-     * @param batch The current batch from the satage
+     * @param batch The current batch from the stage
      * @param parentAlpha The parent alpha
      */
     @Override
@@ -75,12 +77,20 @@ public class SpecialAttackIcon extends Actor {
 
         //Checks whether the player can use the special attack
         if(player.getSpecialAttack()){
-            if(player.canSpecialAttack()){
+            //Attack has been unlocked
+            if(player.getSpecialAttackDelay() == 0){
+                //Attack can be used
                 font.setColor(0,1,0,1f);
                 font.draw(batch, getTextLayout(), getX()+size, getY()+getTextLayout().height);
                 batch.draw(icon, getX(), getY(), size, size);
+            }else if(player.getSpecialAttackDelay() <= 5){
+                //Attack is nearly ready
+                font.setColor(1f,0.8f,0,1f);
+                font.draw(batch, getTextLayout(), getX()+size, getY()+getTextLayout().height);
+                batch.draw(icon, getX(), getY(), size, size);
             }else{
-                font.setColor(0.2f,0.2f,0.2f,1f);
+                //Attack is powering up
+                font.setColor(0.8f,0f,0f,1f);
                 font.draw(batch, getTextLayout(), getX()+size, getY()+getTextLayout().height);
                 batch.draw(icon, getX(), getY(), size, size);
             }
@@ -94,6 +104,14 @@ public class SpecialAttackIcon extends Actor {
      * @return GlyphLayout for use in a label
      */
     private GlyphLayout getTextLayout(){
-        return new GlyphLayout(font, String.valueOf("F"));
+
+        if(player.getSpecialAttackDelay() == 0) {
+            //Show F to indicate the button to be pressed
+            return new GlyphLayout(font, String.valueOf("F"));
+        }else{
+            //Display how long is left on the recharge
+            String secsLeft = String.valueOf((int) Math.ceil(player.getSpecialAttackDelay()));
+            return new GlyphLayout(font, String.valueOf(secsLeft));
+        }
     }
 }

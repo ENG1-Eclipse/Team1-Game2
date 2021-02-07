@@ -90,7 +90,7 @@ public class Player extends Actor {
      *  Damage multiplier
      */
     private Boolean enableAttack = false;
-    private float specialAttackDelay = 0; 
+    public float specialAttackDelay = 0;
     private float damageMulti = 2.5f;
 
     private Integer difficulty = 0;
@@ -260,7 +260,7 @@ public class Player extends Actor {
                      * Attack delay now in seconds
                      */
 
-                    attackDelay = 2f;
+                    attackDelay = 1f;
                     //display attack
                     batch.draw(imageAttack, xAtt, yAtt, wAtt, wAtt);
                 } else {
@@ -424,6 +424,7 @@ public class Player extends Actor {
     public boolean canSpecialAttack(){
         return specialAttackDelay<=0;
     }
+    public float getSpecialAttackDelay() {return specialAttackDelay;}
 
     public void startRegen(float regenTime){
         regenTimer = regenTime;
