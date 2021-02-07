@@ -296,6 +296,7 @@ public class GameScreen extends ScreenAdapter {
                         this.HUD
                 );
                 stage.addActor(newPUP);
+                this.remainingPowerups.add(newPUP);
             }
 
         }else{
