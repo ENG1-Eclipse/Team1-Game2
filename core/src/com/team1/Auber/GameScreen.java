@@ -22,6 +22,7 @@ import com.team1.Auber.Smoke.Smoke;
 
 import org.json.*;
 import java.util.Base64;
+import java.util.Random;
 
 import javax.print.FlavorException;
 
@@ -46,10 +47,16 @@ public class GameScreen extends ScreenAdapter {
     private com.team1.Auber.HUD.HUD HUD;
     public Integer difficulty;
     public Boolean resumingSave;
+
+    /**
+     * These are all Boolean values that control aspects of the game and/or what needs to occur.
+     */
     public static Boolean needToSave = false;
     public static Boolean needToExit = false;
     public static Boolean gameOverWin = false;
     public static Boolean gameOverLose = false;
+    public static Boolean gamePaused = false;
+    public static Boolean demo = false;
 
     /**
      * The sprite batch for everything except the map popup
@@ -86,16 +93,27 @@ public class GameScreen extends ScreenAdapter {
      */
     JSONObject gameData = new JSONObject(Gdx.files.internal("mapdata.json").readString());
 
+    /**
+     * Loads saved game if available.
+     */
     Preferences prefs = Gdx.app.getPreferences("Auber");
 
+    /**
+     * Create arrays to store Operatives and PowerUps that remain, in order to save them.
+     */
     public ArrayList<Operative> remainingOperatives = new ArrayList<>();
+    public ArrayList<PowerUp> remainingPowerups = new ArrayList<>();
 
     /**
      * Create the game and start the background sounds playing
      *
      * @param game the AuberGame game
+     * @param difficulty the difficulty of the game
+     * @param resumingSave whether or not the game is resuming from a save file
+     * @param demo whether the game is the demo version or not
      */
-    public GameScreen (AuberGame game, Integer difficulty, Boolean resumingSave){
+    public GameScreen (AuberGame game, Integer difficulty, Boolean resumingSave, Boolean demo){
+        this.demo = demo;
         this.difficulty = difficulty;
         this.game = game;
         this.resumingSave = resumingSave;
@@ -104,7 +122,6 @@ public class GameScreen extends ScreenAdapter {
             ambience.setLooping(true);
             ambience.setVolume(0.7f);
         }
-
     }
 
     
@@ -128,36 +145,41 @@ public class GameScreen extends ScreenAdapter {
         Player.game = game;
         Systems.game = game;
         Operative.game = game;
+        PlayerDemo.game = game;
 
         //Create the player and add it to the stage
-
-        if(! resumingSave){
-            player = new Player(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1), difficulty);
+        if(demo){
+            player = new PlayerDemo(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1), difficulty,this);
             stage.addActor(player);
         }else{
-            int newx = Math.round(prefs.getInteger("auberX") / 32);
-            int newy = Math.round(prefs.getInteger("auberY") / 32);
+            if(! resumingSave){
+                player = new Player(map, gameData.getJSONArray("playerStartCoords").getInt(0), gameData.getJSONArray("playerStartCoords").getInt(1), difficulty);
+                stage.addActor(player);
+            }else{
+                int newx = Math.round(prefs.getInteger("auberX") / 32);
+                int newy = Math.round(prefs.getInteger("auberY") / 32);
 
-            player = new Player(map, newx, newy, difficulty);
-            stage.addActor(player);
+                player = new Player(map, newx, newy, difficulty, prefs.getFloat("auberSpeed"), prefs.getInteger("auberAttackDamage"), prefs.getBoolean("auberSpecialAttack"));
+                stage.addActor(player);
 
-            player.setHealth(prefs.getInteger("auberHealth", 100));
-            player.setMaxHealth(prefs.getInteger("auberMaxHealth",100));
+                player.setHealth(prefs.getInteger("auberHealth", 100));
+                player.setMaxHealth(prefs.getInteger("auberMaxHealth",100));
 
-
+            }
         }
-
-
 
         //Create the Heads up display
         HUD = new HUD(player, gameData, game);
         Gdx.input.setInputProcessor(HUD);
 
-
+        //Print welcome messages to the HUD
         if(this.resumingSave){
-         HUD.saveNotification("Save Loaded Successfully");
-         HUD.saveNotification("Welcome Back, Auber");
-         }else{
+            HUD.saveNotification("Save Loaded Successfully");
+            HUD.infoNotification("System Log resumed...");
+         }else if(this.demo){
+            HUD.infoNotification("Game in demo mode.");
+            HUD.infoNotification("System Log started...");
+        }else{
             HUD.infoNotification("System Log started...");
         }
 
@@ -168,6 +190,7 @@ public class GameScreen extends ScreenAdapter {
         final String systemCoardsDataTag = "systemCoords";
 
         if(! resumingSave){
+            //Load the default systems from the game info
             for (int i = 0; i < gameData.getJSONArray(roomsDataTag).length(); i++) {
                 if (!gameData.getJSONArray(roomsDataTag).getJSONObject(i).isNull(systemCoardsDataTag)) {
                     stage.addActor(new Systems(
@@ -180,6 +203,7 @@ public class GameScreen extends ScreenAdapter {
                 }
             }
         }else{
+            //Load the systems from the save file
             String sysSaveString = prefs.getString("remainingSystems");
             ByteArrayInputStream sysIn = new ByteArrayInputStream(Base64.getDecoder().decode(sysSaveString));
             ArrayList<ArrayList> sysInList = null;
@@ -213,6 +237,7 @@ public class GameScreen extends ScreenAdapter {
         //create operatives + add them to the stage
         Operative.remainingOpers = 0;
         if(! resumingSave){
+            //Create the default operatives
             for (int i = 0; i < gameData.getJSONArray(opDataTag).length(); i++) {
                 Operative newOp = new Operative(
                         gameData.getJSONArray(opDataTag).getJSONArray(i).getInt(0),
@@ -226,9 +251,8 @@ public class GameScreen extends ScreenAdapter {
                 stage.addActor(newOp);
                 this.remainingOperatives.add(newOp);
             }
-
-            //HUD.setValues(Operative.remainingOpers, Systems.systemsRemaining.size());
         }else{
+            //Create the saved operatives
             String operSaveString = prefs.getString("remainingOperatives");
             ByteArrayInputStream operIn = new ByteArrayInputStream(Base64.getDecoder().decode(operSaveString));
             ArrayList<ArrayList> operInList = null;
@@ -259,52 +283,54 @@ public class GameScreen extends ScreenAdapter {
         }
         HUD.setValues(8, 15);
 
-        //--------------------------------------- P O W E R  U P S ---------------------------------------------------
         // Adding powerups to the map
-        PowerUp pUp;
-        /**
-         * Type    : Health Boost
-         * Location: Bathroom  
-         * Xpos    : 43
-         * Ypos    : 33
-         */
-        pUp = new PowerUp(map, 43, 33,0);
-        stage.addActor(pUp);
-        /**
-         * Type    : Health Boost
-         * Location: Stern Corridor  
-         * Xpos    : 17
-         * Ypos    : 13
-         */
-        pUp = new PowerUp(map, 17, 13,0);
-        stage.addActor(pUp);
 
-        /**
-         * Type    : Speed Boost
-         * Location: Lab
-         * Xpos    : 48
-         * Ypos    : 42
-         */
-        pUp = new PowerUp(map, 48, 42,1);
-        stage.addActor(pUp);
+        if(! resumingSave){
+            //Create the default power ups
+            for (int i = 0; i < gameData.getJSONArray("powerupData").length(); i++) {
+                PowerUp newPUP = new PowerUp(
+                        map,
+                        gameData.getJSONArray("powerupData").getJSONArray(i).getInt(0),
+                        gameData.getJSONArray("powerupData").getJSONArray(i).getInt(1),
+                        gameData.getJSONArray("powerupData").getJSONArray(i).getInt(2),
+                        this.HUD
+                );
+                stage.addActor(newPUP);
+                this.remainingPowerups.add(newPUP);
+            }
 
-        /**
-         * Type    : Speed Boost
-         * Location: Storage Room
-         * Xpos    : 16
-         * Ypos    : 6
-         */
-        pUp = new PowerUp(map, 16, 6,1);
-        stage.addActor(pUp);
+        }else{
+            //Create the saved power ups
+            String pupSaveString = prefs.getString("remainingPowerups");
+            ByteArrayInputStream pupIn = new ByteArrayInputStream(Base64.getDecoder().decode(pupSaveString));
+            ArrayList<ArrayList> pupInList = null;
+            try {
+                Object pupInObj = new ObjectInputStream(pupIn).readObject();
+                pupInList = (ArrayList<ArrayList>) pupInObj;
+            }catch (ClassNotFoundException | IOException e){
+                e.printStackTrace();
+            }
 
-        /**
-         * Type    : Special Attack
-         * Location: MedBay
-         * Xpos    : 18
-         * Ypos    : 33
-         */
-        pUp = new PowerUp(map, 18, 33,3);
-        stage.addActor(pUp);
+            assert pupInList != null;
+
+            for (ArrayList arrayList : pupInList){
+                float newx = (float) arrayList.get(0);
+                float newy = (float) arrayList.get(1);
+                int newtype = (int) arrayList.get(2);
+                PowerUp pUp = new PowerUp(map, newx, newy, newtype, this.HUD);
+                stage.addActor(pUp);
+                this.remainingPowerups.add(pUp);
+            }
+
+        }
+
+        //The first random operative for the demo player to attack
+        //After the first, the demo player will auto-generate the next one
+        if(demo){
+            Random rand = new Random();
+            PlayerDemo.randOper = rand.nextInt(remainingOperatives.size());
+        }
+
     }
 
     @Override
@@ -335,6 +361,7 @@ public class GameScreen extends ScreenAdapter {
         //Draw the HUD
         HUD.draw();
 
+        //Save the game if required
         if(needToSave){
             needToSave = false;
             try {
@@ -344,16 +371,19 @@ public class GameScreen extends ScreenAdapter {
             }
         }
 
+        //Exit the game if required
         if(needToExit){
             needToExit = false;
             exitGame();
         }
 
+        //Perform this if Auber has won
         if(gameOverWin){
             gameOverWin = false;
             wonGame();
         }
 
+        //Perform this if Auber has lost
         if(gameOverLose){
             gameOverLose = false;
             lostGame();
@@ -365,8 +395,6 @@ public class GameScreen extends ScreenAdapter {
             mapSpriteBatch.draw(mapPopupTexture, 0, 0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             mapSpriteBatch.end();
         }
-
-
     }
 
     @Override
@@ -386,70 +414,104 @@ public class GameScreen extends ScreenAdapter {
     }
 
     public void exitGame(){
+        //Code required to execute when the game is exiting
         ambience.stop();
         game.setScreen(new TitleScreen(game, false));
     }
 
     public void wonGame(){
+        //Code required to execute when Auber has won the game
         ambience.stop();
         map.autoLeave(player);
         game.setScreen(new GameEndScreen(game, true));
-
     }
 
     public void lostGame(){
+        //Code required to execute when Auber has lost the game
         ambience.stop();
         map.autoLeave(player);
         game.setScreen(new GameEndScreen(game, false));
     }
 
     public void saveGame() throws IOException {
-        prefs.clear();
-        prefs.flush();
+        //Save the current state of the game to be resumed later
+        if(demo){
+            //Prevent saving in demo mode
+            //This is a precaution as the user shouldn't be able to save the demo anyway
+            HUD.saveNotification("Can't save game in demo mode!");
+        }else{
+            //Clear any previous saves
+            prefs.clear();
+            prefs.flush();
 
-        ArrayList<ArrayList> savedOperatives = new ArrayList<>();
-        for(Operative remainingOper : remainingOperatives){
-            if(! remainingOper.dead){
-                ArrayList<Integer> thisOper = new ArrayList<>();
-                thisOper.add((int) remainingOper.getX());
-                thisOper.add((int) remainingOper.getY());
-                thisOper.add(remainingOper.specialAbilityID);
-                savedOperatives.add(thisOper);
+            //Save the remaining operatives
+            ArrayList<ArrayList> savedOperatives = new ArrayList<>();
+            for(Operative remainingOper : remainingOperatives){
+                if(! remainingOper.dead){
+                    ArrayList<Integer> thisOper = new ArrayList<>();
+                    thisOper.add((int) remainingOper.getX());
+                    thisOper.add((int) remainingOper.getY());
+                    thisOper.add(remainingOper.specialAbilityID);
+                    savedOperatives.add(thisOper);
+                }
             }
+            ByteArrayOutputStream operOut = new ByteArrayOutputStream();
+            new ObjectOutputStream(operOut).writeObject(savedOperatives);
+            String operSaveString = Base64.getEncoder().encodeToString(operOut.toByteArray());
+            prefs.putString("remainingOperatives", operSaveString);
+
+            //Save data about Auber
+            prefs.putInteger("auberX", (int) player.getX());
+            prefs.putInteger("auberY", (int) player.getY());
+            prefs.putInteger("auberHealth", player.getHealth());
+            prefs.putInteger("auberMaxHealth", player.getMaxHealth());
+            prefs.putFloat("auberSpeed", player.getSpeed());
+            prefs.putInteger("auberAttackDamage", player.getDamage());
+            prefs.putBoolean("auberSpecialAttack", player.getSpecialAttack());
+
+            //Save the remaining systems
+            ArrayList<ArrayList<Object>> savedSystems = new ArrayList<>();
+            for(Systems remainingSystem : Systems.systemsRemaining){
+                ArrayList<Object> remainingSys = new ArrayList<>();
+                remainingSys.add(remainingSystem.gridX);
+                remainingSys.add(remainingSystem.gridY);
+                remainingSys.add(remainingSystem.roomName);
+                savedSystems.add(remainingSys);
+            }
+            ByteArrayOutputStream sysOut = new ByteArrayOutputStream();
+            new ObjectOutputStream(sysOut).writeObject(savedSystems);
+            String sysSaveString = Base64.getEncoder().encodeToString(sysOut.toByteArray());
+            prefs.putString("remainingSystems", sysSaveString);
+
+            //Save the remaining powerups
+            ArrayList<ArrayList<Object>> savedPowerUps = new ArrayList<>();
+            for (PowerUp remainingPowerUp : remainingPowerups){
+                if(! remainingPowerUp.collected){
+                    ArrayList<Object> remainingPUP = new ArrayList<>();
+                    remainingPUP.add(remainingPowerUp.xPos);
+                    remainingPUP.add(remainingPowerUp.yPos);
+                    remainingPUP.add(remainingPowerUp.powerType);
+                    savedPowerUps.add(remainingPUP);
+                }
+            }
+            ByteArrayOutputStream pupOut = new ByteArrayOutputStream();
+            new ObjectOutputStream(pupOut).writeObject(savedPowerUps);
+            String pupSaveString = Base64.getEncoder().encodeToString(pupOut.toByteArray());
+            prefs.putString("remainingPowerups", pupSaveString);
+
+            //Indicate that the save file is valid to be resumed from
+            prefs.putBoolean("canBeResumed", true);
+
+            //Save the difficulty of the game
+            prefs.putInteger("gameDifficulty", this.difficulty);
+
+            //Ensure the save is written to disk
+            prefs.flush();
+
+            //Indicate to the user that the save has been successful
+            HUD.saveNotification("Game Saved Successfully");
+            HUD.saveNotification("Press ESC to exit game");
         }
-
-        ByteArrayOutputStream operOut = new ByteArrayOutputStream();
-        new ObjectOutputStream(operOut).writeObject(savedOperatives);
-        String operSaveString = Base64.getEncoder().encodeToString(operOut.toByteArray());
-        prefs.putString("remainingOperatives", operSaveString);
-
-        prefs.putInteger("auberX", (int) player.getX());
-        prefs.putInteger("auberY", (int) player.getY());
-        prefs.putInteger("auberHealth", player.getHealth());
-        prefs.putInteger("auberMaxHealth", player.getMaxHealth());
-
-        ArrayList<ArrayList<Object>> savedSystems = new ArrayList<>();
-        for(Systems remainingSystem : Systems.systemsRemaining){
-            ArrayList<Object> remainingSys = new ArrayList<>();
-            remainingSys.add(remainingSystem.gridX);
-            remainingSys.add(remainingSystem.gridY);
-            remainingSys.add(remainingSystem.roomName);
-            savedSystems.add(remainingSys);
-        }
-
-        ByteArrayOutputStream sysOut = new ByteArrayOutputStream();
-        new ObjectOutputStream(sysOut).writeObject(savedSystems);
-        String sysSaveString = Base64.getEncoder().encodeToString(sysOut.toByteArray());
-        prefs.putString("remainingSystems", sysSaveString);
-
-        prefs.putBoolean("canBeResumed", true);
-
-        prefs.putInteger("gameDifficulty", this.difficulty);
-
-        prefs.flush();
-
-        HUD.saveNotification("Game Saved Successfully");
-        HUD.saveNotification("Press ESC to exit game");
 
     }
 
@@ -459,15 +521,17 @@ public class GameScreen extends ScreenAdapter {
      * @param x x pos
      * @param y y pos
      * @param type powerup type
-     * 
+     *
      */
     void createPowerUp(Float x, Float y,int type){
         //Drop Powerup on death
         PowerUp pUp;
-        pUp = new PowerUp(map, x, y,type);
+        pUp = new PowerUp(map, x, y,type, this.HUD);
         stage.addActor(pUp);
+        this.remainingPowerups.add(pUp);
     }
 
+    //Create Smoke Animation
     void createSmoke(float x, float y, float xVel,float yVel){
         stage.addActor(new Smoke(x, y, xVel, yVel));
     }

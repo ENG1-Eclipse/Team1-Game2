@@ -29,7 +29,7 @@ public class PauseDialog extends Dialog {
     public AuberGame game;
 
     /**
-     * The time it takes for the dialogue to fade in and out
+     * The time it takes for the dialog to fade in and out
      */
     private final float fadeTime = 0.2f;
 
@@ -52,7 +52,10 @@ public class PauseDialog extends Dialog {
 
         text("Options: ").center();
         button("Resume", 0);
-        button("Save Game", 1);
+        if(! GameScreen.demo) {
+            //Prevent the save button from appearing in demo mode
+            button("Save Game", 1);
+        }
         button("Exit", 2);
     }
 
@@ -81,12 +84,17 @@ public class PauseDialog extends Dialog {
     public void result(Object object){
 
         if((Integer) object == 0){
+            //Resume
+            GameScreen.gamePaused = false;
             return;
         } else if((Integer) object == 2){
-            //game.setScreen(new TitleScreen(game, true));
+            //Exit
+            GameScreen.gamePaused = false;
             GameScreen.needToExit = true;
             return;
         }else if((Integer) object == 1){
+            //Save
+            GameScreen.gamePaused = false;
             GameScreen.needToSave = true;
             return;
         }

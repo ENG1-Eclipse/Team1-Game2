@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 /**
  *  A connection between two points of the map
  *
- * @author Adam Wiegrand
+ * @author Adam Wiegrand (Team 4)
  */
 public class GridPath implements Connection<GridNode>{
     GridNode from;

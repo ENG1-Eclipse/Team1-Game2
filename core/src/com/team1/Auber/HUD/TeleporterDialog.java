@@ -38,7 +38,7 @@ public class TeleporterDialog extends Dialog {
     private final int teleporterSize;
 
     /**
-     * The time it takes for the dialogue to fade in and out
+     * The time it takes for the dialog to fade in and out
      */
     private final float fadeTime = 0.2f;
 
@@ -52,7 +52,7 @@ public class TeleporterDialog extends Dialog {
      * @param gameData A JSONObject with the game data. This is used to pull the locations of the teleporters.
      * @param player The player class
      * @param hud The HUD display - used for the notifications
-     * @param teleporterSize - The size in map squares (from the TMX file) of the teleporter's (default should be 2 as they are 2x2)
+     * @param teleporterSize - The size in map squares (from the TMX file) of the teleporters (default should be 2 as they are 2x2)
      */
     public TeleporterDialog(JSONObject gameData, Player player, HUD hud, int teleporterSize){
         super("Teleporters", new Skin(Gdx.files.internal("skin/uiskin.json")));
@@ -60,7 +60,7 @@ public class TeleporterDialog extends Dialog {
         this.player = player;
         this.hud = hud;
 
-        //The text displayed on the dialouge
+        //The text displayed on the dialog
         text("Where do you want to teleport?");
 
         //For all of the rooms check to see if it has a teleporter
@@ -75,6 +75,8 @@ public class TeleporterDialog extends Dialog {
                 });
             }
         }
+
+        button("CANCEL", 0);
     }
 
     /**
@@ -102,7 +104,7 @@ public class TeleporterDialog extends Dialog {
     }
 
     /**
-     * Fade out the diolouge. Overriden then default so the fade time can easily be ajusted.
+     * Fade out the diolog. Overridden then default so the fade time can easily be adjusted.
      */
     @Override
     public void hide(){
@@ -116,26 +118,32 @@ public class TeleporterDialog extends Dialog {
      * @param object The object from the button
      */
     public void result(Object object){
-        //Make sure the object is a JSONArray
-        if (!(object instanceof JSONArray)){
-            return;
-        }
+        if(object instanceof Integer){
+            if((int) object == 0){
+                this.hide();
+            }
+        }else{
+            //Make sure the object is a JSONArray
+            if (!(object instanceof JSONArray)){
+                return;
+            }
 
-        //Make sure the player is still on a teleporter
-        if(!isPlayerTouchingTeleporter()) {
-            hud.errorNotification("You have moved off the teleporter pad! You need to be standing on a teleporter pad to be able to teleport!");
-            return;
-        }
+            //Make sure the player is still on a teleporter
+            if(!isPlayerTouchingTeleporter()) {
+                hud.errorNotification("You have moved off the teleporter pad! You need to be standing on a teleporter pad to be able to teleport!");
+                return;
+            }
 
-        //Move the player to the center of the new teleporter and play teleporter the sound
-        JSONArray coords = (JSONArray) object;
-        float teleporterOffset = teleporterSize / 2f;
-        if(! com.team1.Auber.AuberGame.isGameMuted){
-            teleporterSounds.play(0.13f);
-        }
+            //Move the player to the center of the new teleporter and play teleporter the sound
+            JSONArray coords = (JSONArray) object;
+            float teleporterOffset = teleporterSize / 2f;
+            if(! com.team1.Auber.AuberGame.isGameMuted){
+                teleporterSounds.play(0.13f);
+            }
 
-        player.setPosition(player.map.worldPos(coords.getInt(0) + teleporterOffset -0.125f),
-                player.map.worldPos(coords.getInt(1) + teleporterOffset - 0.25f));
+            player.setPosition(player.map.worldPos(coords.getInt(0) + teleporterOffset -0.125f),
+                    player.map.worldPos(coords.getInt(1) + teleporterOffset - 0.25f));
+        }
 
     }
 

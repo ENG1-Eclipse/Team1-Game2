@@ -40,14 +40,16 @@ public class ResumeScreen extends ScreenAdapter {
      */
     private final Sound menuSelect = Gdx.audio.newSound(Gdx.files.internal("audio/menuSelect.ogg"));
 
-
+    //The difficulty of the resumed game
     public int resumingDifficulty = 0;
 
+    //Saved Game
     Preferences prefs = Gdx.app.getPreferences("Auber");
 
     /**
      *
      * @param game
+     * @param resumingDifficulty the difficulty of the resumed game
      */
     public ResumeScreen(AuberGame game, int resumingDifficulty){
         this.game = game;
@@ -77,7 +79,7 @@ public class ResumeScreen extends ScreenAdapter {
         table.add(resumeImg).pad(10).fillY().align(Align.center);
         table.row();
 
-        //Create and add the yes button and add the event listener
+        //Create and add the YES button and add the event listener
         ImageButton.ImageButtonStyle yesStyle =  new ImageButton.ImageButtonStyle();
         yesStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/yesInactive.png"))));
         yesStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/yesActive.png"))));
@@ -95,12 +97,12 @@ public class ResumeScreen extends ScreenAdapter {
                 if(! AuberGame.isGameMuted){
                     menuSelect.play(0.2f);
                 }
-                game.setScreen(new GameScreen(game, resumingDifficulty, true));
+                game.setScreen(new GameScreen(game, resumingDifficulty, true, false));
 
             }
         });
 
-        //Create and add the no button and add the event listener
+        //Create and add the NO button and add the event listener
         ImageButton.ImageButtonStyle noStyle =  new ImageButton.ImageButtonStyle();
         noStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/noInactive.png"))));
         noStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/noActive.png"))));
@@ -118,6 +120,7 @@ public class ResumeScreen extends ScreenAdapter {
                 if(! AuberGame.isGameMuted){
                     menuSelect.play(0.2f);
                 }
+                //Erase the currently saved game
                 prefs.clear();
                 prefs.flush();
                 game.setScreen(new DifficultyScreen(game));

@@ -11,7 +11,6 @@ import com.team1.Auber.HUD.HUD;
  * @author Adam Wiegand (Team 4)
  * @author Robert Watts (Team 4)
  * @author Bogdan Bodnariu-Lescinschi (Team 4)
- *
  * @author Harry Smith (Team 1)
  */
 public class Systems extends Actor {
@@ -95,6 +94,10 @@ public class Systems extends Actor {
         if (delay >= healWait && health < healthMax && delay % 10 == 0){
             //edit the delay % X to change rate of healing, fps/X = hps
             health += 1;
+        }
+
+        if(currentNotification != 0 && health == healthMax){
+            currentNotification = 0;
         }
     }
 

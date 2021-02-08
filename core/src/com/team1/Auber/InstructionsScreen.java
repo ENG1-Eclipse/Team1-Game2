@@ -24,7 +24,9 @@ import com.badlogic.gdx.Input.Keys;
 /**
  * Instruction is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the instruction screen.
  *
- * @author Bogdan Bodnariu-Lescinschi
+ * @author Bogdan Bodnariu-Lescinschi (Team 4)
+ * @author Harry Smith (Team 1)
+ *
  */
 public class InstructionsScreen extends ScreenAdapter {
 
@@ -47,7 +49,7 @@ public class InstructionsScreen extends ScreenAdapter {
 
     /**
      *
-     * @param game
+     * @param game the AuberGame instance
      */
     public InstructionsScreen(AuberGame game){
         this.game = game;
@@ -142,7 +144,7 @@ public class InstructionsScreen extends ScreenAdapter {
         stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
 
-        //If the excape key is pressed go back to the main menu
+        //If the escape key is pressed go back to the main menu
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
             game.setScreen(new TitleScreen(game, false));
         }

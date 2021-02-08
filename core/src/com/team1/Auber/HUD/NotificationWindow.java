@@ -18,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * Creates a scrolling notification window that can have notifications added to it in diffrent colours.
  *
- * @author Robert Watts
+ * @author Robert Watts (Team 4)
  */
 public class NotificationWindow extends ScrollPane {
     protected float width;

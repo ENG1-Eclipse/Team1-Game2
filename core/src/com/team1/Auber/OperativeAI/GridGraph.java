@@ -13,7 +13,7 @@ import com.team1.Auber.Operative;
  *  Used to calculate how the operative needs to move by following the path. This is the main pathfinding class used
  *  by the {@link Operative}.
  *
- * @author Adam Wiegrand
+ * @author Adam Wiegrand (Team 4)
  */
 public class GridGraph implements IndexedGraph<GridNode>{
     GridHeur gridHeuristic = new GridHeur();

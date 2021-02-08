@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.team1.Auber.GameScreen;
 import com.team1.Auber.Systems;
 import com.team1.Auber.Operative;
 import com.team1.Auber.Player;
@@ -83,6 +84,7 @@ public class HUD extends Stage {
         operativesHealthBar.setPosition(Gdx.graphics.getWidth() - scaledWidth - xOffset, yOffset + scaledHeight + 50);
         this.addActor(operativesHealthBar);
 
+        //Create the special attack indicator
         specialAttack = new SpecialAttackIcon(player, 100);
         specialAttack.setPosition(20,2*getHeight()/3);
         this.addActor(specialAttack);
@@ -94,7 +96,7 @@ public class HUD extends Stage {
             @Override
             public boolean keyTyped(InputEvent event, char key)
             {
-                //if the letter to is typed the show the teleporter dialouge
+                //if the letter to is typed the show the teleporter dialog
                 if(key == 'E' || key == 'e'){
                     teleporterDialog.show(getStage());
 
@@ -112,6 +114,7 @@ public class HUD extends Stage {
             public boolean keyTyped(InputEvent event, char key)
             {
                 if(key == KeyEvent.VK_ESCAPE){
+                    GameScreen.gamePaused = true;
                     pauseDialog.show(getStage());
                     return true;
                 }
@@ -131,7 +134,6 @@ public class HUD extends Stage {
 
     /**
      * Add a success notification
-     *
      * @param text the notification
      */
     public void successNotification(String text){
@@ -140,7 +142,6 @@ public class HUD extends Stage {
 
     /**
      * Add a info notification
-     *
      * @param text the notification
      */
     public void infoNotification(String text){
@@ -148,8 +149,7 @@ public class HUD extends Stage {
     }
 
     /**
-     * Add a error notification
-     *
+     * Add a warning notification
      * @param text the notification
      */
     public void warningNotification(String text){
@@ -158,7 +158,6 @@ public class HUD extends Stage {
 
     /**
      * Add a game notification
-     *
      * @param text the notification
      */
     public void gameNotification(String text){
@@ -167,8 +166,7 @@ public class HUD extends Stage {
 
 
     /**
-     * Add a error notification
-     *
+     * Add an error notification
      * @param text the notification
      */
     public void errorNotification(String text){
@@ -205,7 +203,6 @@ public class HUD extends Stage {
 
     /**
      * Gets this stage
-     *
      * @return returns the value of this
      */
     private Stage getStage(){

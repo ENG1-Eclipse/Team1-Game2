@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
  * A simple smoke particle system to display smoke
- * @author Jamie Hewison
+ * @author Jamie Hewison (Team 1)
  * 
  */
 public class Smoke extends Actor {
@@ -26,6 +26,13 @@ public class Smoke extends Actor {
     private float alpha = 1;
     private java.util.Random rand;
 
+    /**
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param xVel the x velocity
+     * @param yVel the y velocity
+     */
     public Smoke(float x , float y , float xVel, float yVel){
         texture = new Texture(Gdx.files.internal("img/smoke.png"));
         this.setX(x);

@@ -13,8 +13,8 @@ import java.util.Set;
  * The map render. Extended {@link com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer} and then added functionality to detect whether walls,
  * and healing etc
  *
- * @author Adam Wiegrand
- * @author Robert Watts
+ * @author Adam Wiegrand (Team 4)
+ * @author Robert Watts (Team 4)
  */
 public class MapRenderer extends OrthogonalTiledMapRenderer {
 

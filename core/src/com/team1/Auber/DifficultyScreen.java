@@ -19,10 +19,14 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.Input.Keys;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 /**
  * TitleScreen is an extension of {@link com.badlogic.gdx.ScreenAdapter} to create and render the title screen.
  *
- * @author Harry Smith (Team 1 - Implement Difficulty)
+ * @author Harry Smith (Team 1)
  */
 public class DifficultyScreen extends ScreenAdapter {
 
@@ -49,7 +53,7 @@ public class DifficultyScreen extends ScreenAdapter {
 
 
     /**
-     * Create the the title screen screen.
+     * Create the difficulty menu.
      * @param game the AuberGame instance
      */
     public DifficultyScreen (AuberGame game){
@@ -98,7 +102,7 @@ public class DifficultyScreen extends ScreenAdapter {
                 }
 
                 /** Difficulty of 0 represents EASY mode **/
-                game.setScreen(new GameScreen(game, 0, false));
+                game.setScreen(new GameScreen(game, 0, false, false));
             }
         });
 
@@ -127,7 +131,7 @@ public class DifficultyScreen extends ScreenAdapter {
                 }
 
                 /** Difficulty of 1 represents NORMAL mode **/
-                game.setScreen(new GameScreen(game, 1, false));
+                game.setScreen(new GameScreen(game, 1, false, false));
             }
         });
 
@@ -155,7 +159,39 @@ public class DifficultyScreen extends ScreenAdapter {
                     menuSelect.play(0.2f);
                 }
                 /** Difficulty of 2 represents HARD mode **/
-                game.setScreen(new GameScreen(game, 2, false));
+                game.setScreen(new GameScreen(game, 2, false, false));
+            }
+        });
+
+        //Create the Demo button, add it to the table with its click event
+        ImageButton.ImageButtonStyle demoStyle =  new ImageButton.ImageButtonStyle();
+        demoStyle.up = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/demoButtonInactive.png"))));
+        demoStyle.down = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/demoButtonActive.png"))));
+        demoStyle.over = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("img/menu/demoButtonActive.png"))));
+        ImageButton demoButton = new ImageButton(demoStyle);
+        table.add(demoButton).center().pad(5);
+        table.row();
+
+        demoButton.addListener(new InputListener(){
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                //As per libGDX docs this is needed to return true for the touchup event to trigger
+                return true;
+            }
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                //Stop the music playing and change the screen to the game screen
+                if(! AuberGame.isGameMuted){
+                    menuMusic.stop();
+                    GameEndScreen.menuMusic.stop();
+                    menuSelect.play(0.2f);
+                }
+                /** Demo Mode Enabled - 0.4 chance of being NORMAL mode, 0.6 of being EASY. **/
+                ArrayList<Integer> randomDiffList = new ArrayList<>(Arrays.asList(0,0,0,1,1));
+                Random rand = new Random();
+                int randDiff = rand.nextInt(5);
+                int selectedDiff = randomDiffList.get(randDiff);
+                game.setScreen(new GameScreen(game, selectedDiff, false,true));
             }
         });
 

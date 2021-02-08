@@ -1,5 +1,6 @@
 package com.team1.Auber;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.pfa.GraphPath;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,8 +19,7 @@ import java.util.ArrayList;
  *
  * @author Adam Wiegand (Team 4)
  * @author Bogdan Bodnariu-Lescinschi (Team 4)
- *
- * @author Harry Smith (Team 1 - Implement Difficulty, Operative Abilities)
+ * @author Harry Smith (Team 1)
  */
 public class Operative extends Actor {
   public static AuberGame game;
@@ -120,6 +120,7 @@ public class Operative extends Actor {
    * @param hud the HUD
    * @param difficulty The difficulty of the game
    * @param specialAbilityID - This operative's special ability, if required. 0 = No ability.
+   * @param screen the current game screen
    */
   public Operative(int x, int y, MapRenderer map, HUD hud, Integer difficulty, Integer specialAbilityID,GameScreen screen) {
     this.difficulty = difficulty;
@@ -193,20 +194,22 @@ public class Operative extends Actor {
    * Select a system to attack
    */
   public void chooseTarget() {
-    //Make sure their are still systems to attack
-    if (untargetedSystems.size() == 0){
-      //End the game if there are none left
-      if (Systems.systemsRemaining.size() == 0){
-        GameScreen.gameOverLose = true;
+    if(! GameScreen.gamePaused){
+      //Make sure their are still systems to attack
+      if (untargetedSystems.size() == 0){
+        //End the game if there are none left
+        if (Systems.systemsRemaining.size() == 0){
+          GameScreen.gameOverLose = true;
+        } else{
+          target = Systems.systemsRemaining.get((int) Math.round(Math.random() * (Systems.systemsRemaining.size() - 1)));
+        }
       } else{
-        target = Systems.systemsRemaining.get((int) Math.round(Math.random() * (Systems.systemsRemaining.size() - 1)));
+        target = untargetedSystems.get((int) Math.round(Math.random() * (untargetedSystems.size() - 1)));
+        untargetedSystems.remove(target);
       }
-    } else{
-      target = untargetedSystems.get((int) Math.round(Math.random() * (untargetedSystems.size() - 1)));
-      untargetedSystems.remove(target);
+      currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), target.gridX,target.gridY);
+      nodeNum = 0;
     }
-    currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), target.gridX,target.gridY);
-    nodeNum = 0;
   }
 
   @Override
@@ -216,99 +219,104 @@ public class Operative extends Actor {
     }
     //If the operative is hacking
     if (isHacking){
-      if (target.health <= 0){//reached an already killed system
-        isHacking = false;
-        chooseTarget();
-      } else{
-        //delay == A - 1, A is the number of frames an oponent must spend hacking to damage the system
-        if (delay == 18 - 1){
-
-          //damage dealt per A frames
-          target.onHit(this, 1);
-
-          batch.draw(imageAttack,getX() - hitboxOffset,getY() - hitboxOffset,32,32);
-
-          //is the target dead
-          if (target.health <= 0){
-            isHacking = false;
-            chooseTarget();
-          }
-          delay = 0;
+      if(!GameScreen.gamePaused){
+        if (target.health <= 0){//reached an already killed system
+          isHacking = false;
+          chooseTarget();
         } else{
-          delay += 1;
-        }
+          //delay == A - 1, A is the number of frames an oponent must spend hacking to damage the system
+          if (delay == 18 - 1){
+
+            //damage dealt per A frames
+            target.onHit(this, 1);
+
+            batch.draw(imageAttack,getX() - hitboxOffset,getY() - hitboxOffset,32,32);
+
+            //is the target dead
+            if (target.health <= 0){
+              isHacking = false;
+              chooseTarget();
+            }
+            delay = 0;
+          } else{
+            delay += 1;
+          }}
       }
     }
 
     //is the player in combat
     else if (combat){
-      //attack?
-      Player player = null;
-      for (Actor thing : map.InArea(getX() - hitboxOffset,getY() - hitboxOffset,31,31)) {
-        if (thing instanceof Player && delay == 0){
-          player = (Player) thing;
-
-          /**
-           * Damage the player based upon the difficulty
-           */
-
-          if(this.specialAbilityID == 2){
-            if(difficulty == 0){
-              player.onHit(this,10);
-            }else if(difficulty == 1){
-              player.onHit(this,15);
-            }else if(difficulty == 2){
-              player.onHit(this,25);
-            }
-          }else{
-            if(difficulty == 0){
-              player.onHit(this,5);
-            }else if(difficulty == 1){
-              player.onHit(this,7);
-            }else if(difficulty == 2){
-              player.onHit(this,15);
-            }
-          }
-
-
-
-          batch.draw(imageAttack,getX() - hitboxOffset,getY() - hitboxOffset,32,32);
-          delay = 60;
-          break;//only one player
-        }
-      }
-      if (delay > 0){delay -= 1;}
-      if (player == null){
-        //check if player still nearby
-        float size = 32*10;
-        for (Actor thing : map.InArea(getX() + getWidth()/2 - size/2 - hitboxOffset,getY() + getHeight()/2 - size/2 - hitboxOffset,size,size)) {
-          if (thing instanceof Player){
+      if(! GameScreen.gamePaused){
+        //attack?
+        Player player = null;
+        for (Actor thing : map.InArea(getX() - hitboxOffset,getY() - hitboxOffset,31,31)) {
+          if (thing instanceof Player && delay == 0){
             player = (Player) thing;
+
+            /**
+             * Damage the player based upon the difficulty
+             */
+
+            if(this.specialAbilityID == 2){
+              if(difficulty == 0){
+                player.onHit(this,10);
+              }else if(difficulty == 1){
+                player.onHit(this,15);
+              }else if(difficulty == 2){
+                player.onHit(this,25);
+              }
+            }else{
+              if(difficulty == 0){
+                player.onHit(this,5);
+              }else if(difficulty == 1){
+                player.onHit(this,7);
+              }else if(difficulty == 2){
+                player.onHit(this,15);
+              }
+            }
+
+
+
+            batch.draw(imageAttack,getX() - hitboxOffset,getY() - hitboxOffset,32,32);
+            delay = 60;
             break;//only one player
           }
         }
-        if (player == null){//end combat
-          combat = false;
-          delay = 0;
-          chooseTarget();
-        } else {//player still nearby
-          //if (true){return;} //uncomment to kneecap them
-          //move
-          if (nodeNum >= currentPath.getCount()){
-            currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), map.gridPos(player.getX()),map.gridPos(player.getY()));
-            nodeNum = 0;
+        if (delay > 0){delay -= 1;}
+        if (player == null){
+          //check if player still nearby
+          float size = 32*10;
+          for (Actor thing : map.InArea(getX() + getWidth()/2 - size/2 - hitboxOffset,getY() + getHeight()/2 - size/2 - hitboxOffset,size,size)) {
+            if (thing instanceof Player){
+              player = (Player) thing;
+              break;//only one player
+            }
           }
-          move();
+          if (player == null){//end combat
+            combat = false;
+            delay = 0;
+            chooseTarget();
+          } else {//player still nearby
+            //if (true){return;} //uncomment to kneecap them
+            //move
+            if (nodeNum >= currentPath.getCount()){
+              currentPath = pathfinder.findPath(map.gridPos(getX()),map.gridPos(getY()), map.gridPos(player.getX()),map.gridPos(player.getY()));
+              nodeNum = 0;
+            }
+            move();
+          }
         }
       }
     }
     else{
-      //If the player is not in combat or attacking a system it must be moving
-      move();
+      if(! GameScreen.gamePaused){
+        //If the player is not in combat or attacking a system it must be moving
+        move();
 
-      //Check if we should start hacking
-      if (getX() - hitboxOffset == target.getX() && getY() - hitboxOffset == target.getY()){
-        isHacking = true;
+        //Check if we should start hacking
+        if (getX() - hitboxOffset == target.getX() && getY() - hitboxOffset == target.getY()){
+          isHacking = true;
+        }
       }
     }
     // Draw the image
@@ -316,9 +324,11 @@ public class Operative extends Actor {
 
     smokeTimer += Gdx.graphics.getDeltaTime();
     // Draw Smoke
-    if(smokeTimer > smokeRate){
-      gameScreen.createSmoke(getX()+getWidth()/2, getY()+getHeight(), 0, 15);
-      smokeTimer = 0;
+    if(! GameScreen.gamePaused){
+      if(smokeTimer > smokeRate){
+        gameScreen.createSmoke(getX()+getWidth()/2, getY()+getHeight(), 0, 15);
+        smokeTimer = 0;
+      }
     }
   }
 
@@ -390,10 +400,14 @@ public class Operative extends Actor {
   public void onDeath(){
     // Create a powerup on death if of type: 2
     if(this.specialAbilityID == 2){
+      //Drop an attack powerup
       gameScreen.createPowerUp(getX(), getY(), 2);
     }else if(this.specialAbilityID == 1){
       // Drop a regen powerup
       gameScreen.createPowerUp(getX(), getY(), 4);
+    }else if(this.specialAbilityID == 3){
+      // Drop a speed powerup
+      gameScreen.createPowerUp(getX(), getY(), 1);
     }
     dead = true;
     map.autoLeave(this,getX(),getY(), getWidth(), getHeight());
