@@ -1,20 +1,10 @@
 package com.team1.Auber.HUD;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.team1.Auber.*;
-import com.badlogic.gdx.Preferences;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.util.ArrayList;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 

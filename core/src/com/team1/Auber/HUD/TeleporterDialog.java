@@ -3,7 +3,6 @@ package com.team1.Auber.HUD;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
@@ -26,7 +25,6 @@ public class TeleporterDialog extends Dialog {
     private final HUD hud;
     private final ArrayList<int[]> teleporterPositions = new ArrayList<int[]>();
 
-    private final SpriteBatch mapSpriteBatch = new SpriteBatch();
     private final TextureRegion mapPopupTexture = new TextureRegion(new Texture("img/mapScreen.png"), 0, 0, 1920, 1080);
     Image image1 = new Image(mapPopupTexture);
 
@@ -90,7 +88,7 @@ public class TeleporterDialog extends Dialog {
         if(!isPlayerTouchingTeleporter()){
             hud.errorNotification("You need to be standing on a teleporter pad to be able to teleport!");
         } else {
-            // adding minimap to teleport option and making it scalable
+            // "Assessment 2" adding minimap to teleport option and making it scalable
             image1.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
             stage.addActor(image1);
 

@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -78,7 +77,7 @@ public class InstructionsScreen extends ScreenAdapter {
         table.add(instructions).align(Align.top);
         table.row();
 
-
+        // (Assessment 2) changing "BACK" button implementation to make it work with different resolutions
         Back_Button_inactive = new Texture("img/menu/backButtonInactive.png");
         Back_Button_active = new Texture("img/menu/backButtonActive.png");
 

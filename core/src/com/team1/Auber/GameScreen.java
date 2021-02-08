@@ -389,7 +389,7 @@ public class GameScreen extends ScreenAdapter {
             lostGame();
         }
 
-        //Show the map if the M key is pressed
+        //Show the map if the M key is pressed and (Assessment 2) making it scalable
         if (Gdx.input.isKeyPressed(Keys.M)){
             mapSpriteBatch.begin();
             mapSpriteBatch.draw(mapPopupTexture, 0, 0,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
