@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -33,6 +36,8 @@ public class DifficultyScreen extends ScreenAdapter {
     public AuberGame game;
     private Stage stage;
     private final SpriteBatch batch = new SpriteBatch();
+    public static Texture Back_Button_inactive;
+    public static Texture Back_Button_active;
 
 
     /**
@@ -196,7 +201,48 @@ public class DifficultyScreen extends ScreenAdapter {
         });
 
 
+        // (Assessment 2) creating back button for difficulty screen
+        Back_Button_inactive = new Texture("img/menu/backButtonInactive.png");
+        Back_Button_active = new Texture("img/menu/backButtonActive.png");
 
+        final TextureRegion MyTextureRegion = new TextureRegion(Back_Button_inactive);
+        Drawable drawable = new TextureRegionDrawable(MyTextureRegion);
+        final ImageButton backButton = new ImageButton(drawable);
+
+        backButton.setPosition(Gdx.graphics.getWidth() / 10 - 88, Gdx.graphics.getHeight() / 16 - 50);
+
+        // Check if button is clicked
+        backButton.addListener(new ClickListener(){
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+
+                ImageButton.ImageButtonStyle _oldStyle = backButton.getStyle();
+                _oldStyle.imageUp = new TextureRegionDrawable(Back_Button_active);
+                backButton.setStyle(_oldStyle);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+
+                ImageButton.ImageButtonStyle _oldStyle = backButton.getStyle();
+                _oldStyle.imageUp = new TextureRegionDrawable(Back_Button_inactive);
+                backButton.setStyle(_oldStyle);
+            }
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Go back to the home screen
+                if(! AuberGame.isGameMuted){
+                    menuSelect.play(0.2f);
+                }
+
+                game.setScreen(new TitleScreen(game, true));
+
+            }
+
+        });
+
+        stage.addActor(backButton);
         stage.addActor(table);
     }
 
