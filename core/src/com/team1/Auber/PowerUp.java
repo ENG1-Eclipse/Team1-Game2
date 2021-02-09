@@ -74,7 +74,7 @@ public class PowerUp extends Actor {
 
     /**
    * The ability has been picked up
-   *
+   * (Using the original actor hit system)
    * @param by the actor that picked the powerup
    */
     public void onHit(Actor by) {

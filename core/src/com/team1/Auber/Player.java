@@ -139,6 +139,7 @@ public class Player extends Actor {
     public void draw(Batch batch, float parentAlpha) {
 
         // Regen Power Up
+        // Changed to deltaTime insted of frameCount
         if(regenTimer>0){
             if(! GameScreen.gamePaused){
                 regenTimer -= Gdx.graphics.getDeltaTime();
@@ -386,6 +387,8 @@ public class Player extends Actor {
     public int getHealth(){
         return health;
     }
+
+    //----- Setters and getters added for powerup interations -----
     public int getMaxHealth(){
         return this.maxHealth;
     }
@@ -405,6 +408,7 @@ public class Player extends Actor {
         health = newHealth;
     }
 
+    
     public void setDamage(int newDamage){
         attackDamage = newDamage;
     }
