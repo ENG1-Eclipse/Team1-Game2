@@ -284,15 +284,15 @@ public class GameScreen extends ScreenAdapter {
         HUD.setValues(8, 15);
 
         // Adding powerups to the map
-
+        final String powerupDataTag = "powerupData";
         if(! resumingSave){
             //Create the default power ups
-            for (int i = 0; i < gameData.getJSONArray("powerupData").length(); i++) {
+            for (int i = 0; i < gameData.getJSONArray(powerupDataTag).length(); i++) {
                 PowerUp newPUP = new PowerUp(
                         map,
-                        gameData.getJSONArray("powerupData").getJSONArray(i).getInt(0),
-                        gameData.getJSONArray("powerupData").getJSONArray(i).getInt(1),
-                        gameData.getJSONArray("powerupData").getJSONArray(i).getInt(2),
+                        gameData.getJSONArray(powerupDataTag).getJSONArray(i).getInt(0),
+                        gameData.getJSONArray(powerupDataTag).getJSONArray(i).getInt(1),
+                        gameData.getJSONArray(powerupDataTag).getJSONArray(i).getInt(2),
                         this.HUD
                 );
                 stage.addActor(newPUP);
