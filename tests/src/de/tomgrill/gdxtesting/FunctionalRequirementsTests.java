@@ -50,6 +50,23 @@ public class FunctionalRequirementsTests {
 		assertTrue(15 <= num_rooms);
 	}
 
+	@Test
+	//Check if the map contains at least two teleporters
+	public void twoTeleportersExist(){
+		gameData = new JSONObject(Gdx.files.internal("../core/assets/mapdata.json").readString());
+		testArray = gameData.getJSONArray("rooms");
+		int tp_int = 0;
+		Object tp_coords;
+		for (int i = 0; i < testArray.length(); i++) {
+			JSONObject room = testArray.getJSONObject(i);
+			tp_coords = room.get("teleporterCoords");
+			if (tp_coords instanceof JSONArray){
+				tp_int += 1;
+			}
+		}
+		assertTrue(tp_int >= 2);
+	}
+
 	//Check if at least four unique rooms exist
 	@Test
 	public void fourUniqueRoomsExist() {

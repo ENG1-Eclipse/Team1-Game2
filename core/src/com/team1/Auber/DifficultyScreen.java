@@ -201,7 +201,7 @@ public class DifficultyScreen extends ScreenAdapter {
         });
 
 
-        // (Assessment 2) creating back button for difficulty screen
+        // Creating back button for difficulty screen
         Back_Button_inactive = new Texture("img/menu/backButtonInactive.png");
         Back_Button_active = new Texture("img/menu/backButtonActive.png");
 
@@ -236,7 +236,7 @@ public class DifficultyScreen extends ScreenAdapter {
                     menuSelect.play(0.2f);
                 }
 
-                game.setScreen(new TitleScreen(game, true));
+                game.setScreen(new TitleScreen(game, false));
 
             }
 
